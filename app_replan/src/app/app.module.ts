@@ -27,6 +27,10 @@ import { SendValidationAgainComponent } from './components/send-validation-again
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { AuthGuard } from './AuthGuard';
+import { NavbarLoggedInComponent } from './components/shared/navbar-logged-in/navbar-logged-in.component';
+import { SidePerfileComponent } from './components/shared/side-perfile/side-perfile.component';
+import { PerfileAtributesComponent } from './components/perfile-atributes/perfile-atributes.component';
+import { PerfileModifyPasswordComponent } from './components/perfile-modify-password/perfile-modify-password.component';
 
 @NgModule({
 
@@ -42,7 +46,11 @@ import { AuthGuard } from './AuthGuard';
     ConfirmationRegistrationComponent,
     SendValidationAgainComponent,
     ForgetPasswordComponent,
-    MainPageComponent
+    MainPageComponent,
+    NavbarLoggedInComponent,
+    SidePerfileComponent,
+    PerfileAtributesComponent,
+    PerfileModifyPasswordComponent
   ],
   entryComponents: [],
   imports: [

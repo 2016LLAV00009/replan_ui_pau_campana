@@ -156,10 +156,16 @@ function signIn (req, res) {
           if (!user[0].confirmed) return res.status(404).send({ message: 'Please, confirm your email to log in' })
 
           user[0].password = undefined;
+
+          let muser = user[0].toObject(); // swap for a plain javascript object instance
+          console.log(muser);
+          delete muser["_id"];
+          console.log(".............")
+          console.log(muser)
           return res.status(200).send({
             message: 'You have logged in correctly',
-            user: user[0],
-            token: service.createToken(user[0])
+            user: muser,
+            token: service.createToken(muser)
           })
         }
       });

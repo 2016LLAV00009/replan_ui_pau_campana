@@ -10,6 +10,8 @@ import { SendValidationAgainComponent } from './components/send-validation-again
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { AuthGuard } from './AuthGuard';
+import { PerfileAtributesComponent } from './components/perfile-atributes/perfile-atributes.component';
+import { PerfileModifyPasswordComponent } from './components/perfile-modify-password/perfile-modify-password.component';
 
 
 const app_routes: Routes = [
@@ -23,6 +25,8 @@ const app_routes: Routes = [
   { path: 'send_validation', component: SendValidationAgainComponent },
   { path: 'send_new_password', component: ForgetPasswordComponent },
   { path: 'home', component: MainPageComponent, canActivate: [AuthGuard]},
+  { path: 'profile', component: PerfileAtributesComponent, canActivate: [AuthGuard]},
+  { path: 'profile/modifyPassword', component: PerfileModifyPasswordComponent, canActivate: [AuthGuard]},
   { path: '**', pathMatch: 'full', redirectTo: '' }
   
 ];

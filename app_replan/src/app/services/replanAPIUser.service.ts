@@ -88,17 +88,18 @@ export class replanAPIUserService {
       })
   }
 
-  example() {
-    const url = this.projectsURL + AppConstants.generate_passwordURL;
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser && currentUser.token) {
-      const body = { email: "hola" };
+  modifyPassword(old_password: string, new_password: string) {
+    const url = this.projectsURL + AppConstants.modify_passwordURL;
+    let token = this.getToken();
+    if (token) {
+      const body = { old_password: old_password, 
+                     new_password: new_password };
       const headers = new Headers({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${currentUser.token}`
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        authorization: `Bearer ${token}`
 
       });
-      return this.http.post(url, body, { headers })
+      return this.http.put(url, body, { headers })
         .map(res => {
           return res.json();
         })
@@ -109,5 +110,8 @@ export class replanAPIUserService {
 
   }
 
+  getToken() {
+    return JSON.parse(localStorage.getItem('token'));
+  }
 
 }
