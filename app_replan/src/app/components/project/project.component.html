@@ -1,0 +1,488 @@
+<app-navbar></app-navbar>
+<div class="jumbotron not-margin">
+    <div class="jumbo-container">
+        <h1 class="title-project"></h1>      
+    </div>
+</div>
+<div class="container project-container animated fadein">
+  <div class="row">
+
+    <div class="col-md-6 project-column">
+      <h3>Features</h3>
+      <hr>
+      <div id="loading_for_features" class="loading_spinner"></div>
+      <div class="features-span data-founded" [hidden]="features?.length !== 0"></div>
+      <div class="features-container row scroll-style">
+        <div *ngFor="let feature of features" class="col-sm-6 padding-features">
+            <div class="li-features"
+            dnd-draggable
+            [dragEnabled]="true"
+            [dragData]="(feature.id)">
+              <div class="level-container">
+                <i [hidden]="feature?.priority !== 1" class="priority material-icons" title="Priority">looks_one</i> 
+                <i [hidden]="feature?.priority !== 2" class="priority material-icons" title="Priority">looks_two</i>
+                <i [hidden]="feature?.priority !== 3" class="priority material-icons" title="Priority">looks_3</i> 
+                <i [hidden]="feature?.priority !== 4" class="priority material-icons" title="Priority">looks_4</i> 
+                <i [hidden]="feature?.priority !== 5" class="priority material-icons" title="Priority">looks_5</i>  
+                <img [hidden]="feature?.effort > getLowFeatureEffort()" class="level-image" title="Effort" src="../../../assets/level-1.png">
+                <img [hidden]="feature?.effort <= getLowFeatureEffort() || feature?.effort > getHighFeatureEffort()" class="level-image" title="Effort" src="../../../assets/level-2.png">
+                <img [hidden]="feature?.effort <= getHighFeatureEffort()" class="level-image" title="Effort" src="../../../assets/level-3.png">
+              </div>              
+              <h4 [hidden]="feature?.name.length > 11" class="feature-name">{{feature.name}}</h4>
+              <h4 [hidden]="feature?.name.length <= 11" class="feature-name" title="{{feature.name}}">{{feature.name.substring(0, 10) + '...'}}</h4>
+              <div class="icons-features-content">
+                <a (click)="editFeature(feature.id)">
+                  <i class="fa fa-pencil" aria-hidden="true" title="Edit Feature"></i>
+                </a>
+                <a class="padding-icon" (click)="deleteFeature(feature.id)">
+                  <i class="fa fa-trash-o" aria-hidden="true" title="Delete Feature"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div id="addFeatureDiv" class="text-center">
+        <button (click)="addFeatureModal()" type="button" class="btn add-btn" title="Add Feature">+</button>
+      </div>
+    </div>
+    <div class="col-md-6 project-column">
+      <h3>Releases</h3>
+      <hr>
+      <div id="loading_for_releases" class="loading_spinner"></div>
+      <div class="releases-span data-founded" [hidden]="releases?.length !== 0"></div>
+      <div class="releases-container row scroll-style">
+        <div *ngFor="let release of releases" (click)="goToPlan(release.id)" class="col-sm-12 padding-features">
+            <div class="li-releases"
+            dnd-droppable
+            (onDropSuccess)="transferDataSuccess($event, release.id)">
+              <h4 [hidden]="release?.name.length > 26" class="release-name">{{release.name}}</h4>
+              <h4 [hidden]="release?.name.length <= 26" class="release-name" title="{{release.name}}">{{release.name.substring(0, 25) + '...'}}</h4>
+              <p class="release-dates">from <strong>{{release.starts_at | date: 'dd/MM/yyyy'}}</strong> to <strong>{{release.deadline | date: 'dd/MM/yyyy'}}</strong></p>
+              <div class="icons-content-releases">
+                <a (click)="editRelease(release.id)">
+                  <i class="fa fa-pencil fa-2x" aria-hidden="true" title="Edit Release"></i>
+                </a>
+                <a class="padding-icon" (click)="deleteRelease(release.id)">
+                  <i class="fa fa-trash-o fa-2x" aria-hidden="true" title="Delete Release"></i>
+                </a>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div id="addReleaseDiv" class="text-center">
+        <button (click)="addReleaseModal()" type="button" class="btn add-btn" title="Add Release">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal to add features -->
+<div class="modal fade bd-example-modal-lg" id="add-feature-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add new Feature</h5>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formFeature">
+          <div class="row">
+            <div class="form-group" hidden>
+              <label for="code" class="form-control-label">Code *</label>
+              <input type="number" class="form-control" id="code" formControlName="code" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="name" class="form-control-label">Name *</label>
+              <input type="text" class="form-control" id="nameFeature" formControlName="name" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="effort" class="form-control-label">Effort *</label>
+              <input type="number" class="form-control" id="effort" formControlName="effort" [max]="1000" [min]="0" number required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="priority" class="form-control-label">Priority *</label>
+              <select class="form-control" id="priority" formControlName="priority" required>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="deadline" class="form-control-label">Deadline</label>
+              <input type="date" class="form-control" id="deadlineFeature" formControlName="deadline">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="description" class="form-control-label">Description</label>
+              <textarea class="form-control" id="descriptionFeature" formControlName="description"></textarea>
+            </div>
+          </div>
+        </form>
+
+        <div class="feature-skills-container" [hidden]="skills?.length === 0">
+          <div class="row">
+              <div class="col-md-6">
+                  <h5>Project's skills</h5>
+                  <hr>
+                  <ul class="list-group skills-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunction(skillsNotAssigned, dependenciesNotAssigned, dependenciesToAssign)"
+                      (onDropSuccess)="removeSkill($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsNotAssigned"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(skill)">
+                          {{skill.name}}
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-md-6">
+                  <h5>Feature's required skills</h5>
+                  <hr>
+                  <ul class="list-group skills-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunction(skillsToAssign, dependenciesNotAssigned, dependenciesToAssign)"
+                      (onDropSuccess)="transferSkill($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsToAssign"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(skill)">
+                          {{skill.name}}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+        </div>
+
+        <div class="feature-dependencies-container" [hidden]="features?.length === 0">
+          <div class="row">
+              <div class="col-md-6">
+                  <h5>Project's features</h5>
+                  <hr>
+                  <ul class="list-group skills-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunctionDependencies(dependenciesNotAssigned, skillsNotAssigned, skillsToAssign)"
+                      (onDropSuccess)="removeDependencie($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let feature of dependenciesNotAssigned"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(feature)">
+                          {{feature.name}}
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-md-6">
+                  <h5>Feature's dependencies</h5>
+                  <hr>
+                  <ul class="list-group skills-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunctionDependencies(dependenciesToAssign, skillsNotAssigned, skillsToAssign)"
+                      (onDropSuccess)="transferDependencie($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let feature of dependenciesToAssign"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(feature)">
+                          {{feature.name}}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button [disabled]="!formFeature.valid" (click)="addNewFeature()" type="button" class="btn btn-primary">Add Feature</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal to edit features -->
+<div class="modal fade bd-example-modal-lg" id="edit-feature-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Feature</h5>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formEditFeature">
+          <div class="row">
+            <div class="form-group col-md-4">
+              <label for="name" class="form-control-label">Name *</label>
+              <input type="text" class="form-control" id="nameFeatureEdit" formControlName="name" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="effort" class="form-control-label">Effort *</label>
+              <input type="number" class="form-control" id="effortFeatureEdit" formControlName="effort" [max]="1000" [min]="0" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="priority" class="form-control-label">Priority *</label>
+              <select class="form-control" id="priorityFeatureEdit" formControlName="priority" required>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="description" class="form-control-label">Description</label>
+              <textarea class="form-control" id="descriptionFeatureEdit" formControlName="description"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="deadline" class="form-control-label">Deadline</label>
+              <input type="date" class="form-control" id="deadlineFeatureEdit" formControlName="deadline">
+            </div>
+          </div>
+        </form>
+        <div class="feature-skills-container">
+          <div class="row">
+              <div class="col-md-6">
+                  <h5>Project's skills</h5>
+                  <hr>
+                  <ul class="list-group skills-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunction(skillsNotAssigned, dependenciesNotAssigned, dependenciesToAssign)"
+                      (onDropSuccess)="removeSkill($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsNotAssigned"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(skill)">
+                          {{skill.name}}
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-md-6">
+                  <h5>Feature's required skills</h5>
+                  <hr>
+                  <ul class="list-group skills-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunction(skillsToAssign, dependenciesNotAssigned, dependenciesToAssign)"
+                      (onDropSuccess)="transferSkill($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsToAssign"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(skill)">
+                          {{skill.name}}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+        </div>
+
+        <div class="feature-dependencies-container">
+          <div class="row">
+              <div class="col-md-6">
+                  <h5>Project's features</h5>
+                  <hr>
+                  <ul class="list-group skills-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunctionDependencies(dependenciesNotAssigned, skillsNotAssigned, skillsToAssign)"
+                      (onDropSuccess)="removeDependencie($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let feature of dependenciesNotAssigned"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(feature)">
+                          {{feature.name}}
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-md-6">
+                  <h5>Feature's dependencies</h5>
+                  <hr>
+                  <ul class="list-group skills-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunctionDependencies(dependenciesToAssign, skillsNotAssigned, skillsToAssign)"
+                      (onDropSuccess)="transferDependencie($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let feature of dependenciesToAssign"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(feature)">
+                          {{feature.name}}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button [disabled]="!formEditFeature.valid" (click)="editFeatureAPI()" type="button" class="btn btn-primary">Edit Feature</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal to add releases -->
+<div class="modal fade bd-example-modal-lg" id="add-release-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add new Release</h5>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formRelease">
+          <div class="row">
+            <div class="form-group col-md-4">
+              <label for="name" class="form-control-label">Name *</label>
+              <input type="text" class="form-control" id="nameRelease" formControlName="name" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="starts_at" class="form-control-label">Starts at *</label>
+              <input type="date" class="form-control" id="starts_atRelease" formControlName="starts_at" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="deadline" class="form-control-label">Deadline *</label>
+              <input type="date" class="form-control" id="deadlineRelease" formControlName="deadline" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="description" class="form-control-label">Description</label>
+              <textarea class="form-control" id="descriptionRelease" formControlName="description"></textarea>
+            </div>
+          </div>
+        </form>
+        <div class="release-resources-container">
+          <div class="row">
+              <div class="col-md-6">
+                  <h5>Project's resources</h5>
+                  <hr>
+                  <ul class="list-group resources-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunctionResources(resourcesNotAssigned)"
+                      (onDropSuccess)="removeResource($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let resource of resourcesNotAssigned"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(resource)">
+                          {{resource.name}}
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-md-6">
+                  <h5>Release's resources</h5>
+                  <hr>
+                  <ul class="list-group resources-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunctionResources(resourcesToAssign)"
+                      (onDropSuccess)="transferResource($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let resource of resourcesToAssign"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(resource)">
+                          {{resource.name}}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button [disabled]="!formRelease.valid" (click)="addNewRelease()" type="button" class="btn btn-primary">Add Release</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal to edit releases -->
+<div class="modal fade bd-example-modal-lg" id="edit-release-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Release</h5>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formEditRelease">
+          <div class="row">
+            <div class="form-group col-md-4">
+              <label for="name" class="form-control-label">Name *</label>
+              <input type="text" class="form-control" id="nameReleaseEdit" formControlName="name" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="starts_at" class="form-control-label">Starts at *</label>
+              <input type="date" class="form-control" id="starts_atReleaseEdit" formControlName="starts_at" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="deadline" class="form-control-label">Deadline *</label>
+              <input type="date" class="form-control" id="deadlineReleaseEdit" formControlName="deadline" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="description" class="form-control-label">Description:</label>
+              <textarea class="form-control" id="descriptionReleaseEdit" formControlName="description"></textarea>
+            </div>
+          </div>
+        </form>
+        <div class="release-resources-container">
+          <div class="row">
+              <div class="col-md-6">
+                  <h5>Project's resources</h5>
+                  <hr>
+                  <ul class="list-group resources-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunctionResources(resourcesNotAssigned)"
+                      (onDropSuccess)="removeResource($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let resource of resourcesNotAssigned"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(resource)">
+                          {{resource.name}}
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-md-6">
+                  <h5>Release's resources</h5>
+                  <hr>
+                  <ul class="list-group resources-management-container scroll-style"
+                      dnd-droppable
+                      [allowDrop]="allowDropFunctionResources(resourcesToAssign)"
+                      (onDropSuccess)="transferResource($event)">
+                      <li class="list-group-item list-group-item-action" *ngFor="let resource of resourcesToAssign"
+                          dnd-draggable
+                          [dragEnabled]="true"
+                          [dragData]="(resource)">
+                          {{resource.name}}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button [disabled]="!formEditRelease.valid" (click)="editReleaseAPI()" type="button" class="btn btn-primary">Edit Release</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal to inform errors -->
+<div class="modal fade" id="error-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Error Message</h5>
+      </div>
+      <div class="modal-body text-center">
+        <p id="error-text"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

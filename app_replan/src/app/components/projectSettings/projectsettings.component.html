@@ -1,0 +1,313 @@
+<app-navbar></app-navbar>
+<div class="jumbotron">
+    <div class="jumbo-container">
+        <h1 class="title-project">{{ project?.name }}</h1>      
+        <p class="description-project">{{ project?.description }}</p>
+    </div>
+</div>
+<div class="container project-settings">
+
+    <div id="loading_for_project" class="loading_spinner"></div>
+    <div class="project-information-container">
+
+        <div class="row mt-4 mb-5">
+            <div class="col-md-2">
+                <label class="col-12 col-form-label pl-0">Effort unit</label>
+                <input [readonly]="true" [value]="project?.effort_unit" type="text" class="form-control">
+            </div>
+            <div class="col-4">
+                <label class="col-12 col-form-label pl-0">Hours/Effort Unit</label>
+                <input [readonly]="true" [value]="(project?.hours_per_effort_unit | number : '1.0-0')"  type="text" class="form-control">
+            </div>
+            <div class="col-4 pl-0">
+                <label class="col-12 col-form-label pl-0">Hours/Week and Full Time Resource</label>
+                <input [readonly]="true" [value]="(project?.hours_per_week_and_full_time_resource | number : '1.0-0')" type="text" class="form-control">
+            </div>
+            <div class="col-1 pr-1">
+                <a (click)="editProject()" class="padding-icon edit-settings-icon">
+                    <i class="fa fa-pencil fa-2x" aria-hidden="true" title="Edit Project"></i>
+                </a>
+            </div>
+        </div>
+
+        <h3>Skills</h3>
+        <hr>
+
+        <div class="skills-span data-founded" [hidden]="skills?.length !== 0"></div>
+        <div id="loading_for_skills" class="loading_spinner"></div>
+        <div class="card-group row skills-container">
+            <div class="col-sm-4 skill-card" *ngFor="let skill of skills"> 
+                <div class="card text-center">
+                    <div class="card-block">
+                        <h4 [hidden]="skill?.name.length > 20" class="card-title skill-title">{{skill.name}}</h4>
+                        <h4 [hidden]="skill?.name.length <= 20" class="card-title skill-title" title="{{skill.name}}">{{skill.name.substring(0, 19) + '...'}}</h4>
+                        <p class="card-text" *ngIf="skill.description.length === 0">No Description</p>
+                        <p [hidden]="skill?.description.length > 28" class="card-text">{{skill.description}}</p>
+                        <p [hidden]="skill?.description.length <= 28" class="card-text" title="{{skill.description}}">{{skill.description.substring(0, 26) + '...'}}</p>
+                        <button (click)="deleteSkill(skill.id)" class="btn btn-danger" title="Delete Skill">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="addSkillDiv" class="text-center">
+            <button (click)="addSkillModal()" type="button" class="btn add-btn" title="Add Skill">+</button>
+        </div>
+
+
+        <h3>Resources</h3>
+        <hr>
+
+        <div class="resources-span data-founded" [hidden]="resources?.length !== 0"></div>
+        <div id="loading_for_resources" class="loading_spinner"></div>
+        <div class="card-group row resources-container">
+            <div class="col-sm-3 resource-card" *ngFor="let resource of resources"> 
+                <div class="card text-center" 
+                    [ngClass]="getClass(resource.availability)">
+                    <div class="card-block">
+                        <h4 [hidden]="resource?.name.length > 12" class="card-title resource-title">{{resource.name}}</h4>
+                        <h4 [hidden]="resource?.name.length <= 12" class="card-title resource-title" title="{{resource.name}}">{{resource.name.substring(0, 11) + '...'}}</h4>
+                        <div class="resource-skills">
+                            <span class="card-text" *ngIf="resource?.skills.length === 0">No Skills</span>
+                            <span class="card-text" *ngFor="let skill of resource.skills; let i = index">
+                                <span *ngIf="i !== resource.skills.length-1">{{skill.name}}, </span>
+                                <span *ngIf="i === resource.skills.length-1">{{skill.name}}</span>
+                            </span> 
+                        </div>
+                        <h4 class="disponability-content">
+                            {{resource.availability | number: '1.0-0'}}% <span class="disponability">available</span>
+                        </h4>
+                        <div class="icons-resources-content">
+                            <a class="padding-icon" (click)="editResource(resource.id)">
+                                <i class="fa fa-pencil fa-2x" aria-hidden="true" title="Edit Resource"></i>
+                            </a>
+                            <a class="padding-icon" (click)="deleteResource(resource.id)">
+                                <i class="fa fa-trash-o fa-2x" aria-hidden="true" title="Delete Resource"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="addResourceDiv" class="text-center">
+            <button (click)="addResourceModal()" type="button" class="btn add-btn" title="Add Resource">+</button>
+        </div>
+    </div>
+
+    <!-- Modal to edit Project -->
+    <div class="modal fade" id="edit-project-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Project</h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formEditProject">
+                    <div class="form-group">
+                        <label for="effort_unit" class="form-control-label">Effort unit *</label>
+                        <input type="text" class="form-control" id="edit_effort_unit" formControlName="effort_unit" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hours_per_effort_unit" class="form-control-label">Hours per effort unit *</label>
+                        <input type="number" class="form-control" id="edit_hours_per_effort_unit" formControlName="hours_per_effort_unit" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hours_per_week_and_full_time_resource" class="form-control-label">Hours per week and full time resource *</label>
+                        <input type="number" class="form-control" id="edit_hours_per_week_and_full_time_resource" formControlName="hours_per_week_and_full_time_resource" [max]="60" [min]="0" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button [disabled]="!formEditProject.valid" (click)="editProjectAPI()" type="button" class="btn btn-primary">Edit Project</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal to add skills -->
+    <div class="modal fade" id="add-skill-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add new Skill</h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formSkill">
+                    <div class="form-group">
+                        <label for="name" class="form-control-label">Name *</label>
+                        <input type="text" class="form-control" id="nameSkill" formControlName="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="form-control-label">Description</label>
+                        <textarea class="form-control" id="descriptionSkill" formControlName="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button [disabled]="!formSkill.valid" (click)="addNewSkill()" type="button" class="btn btn-primary">Add Skill</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal to add resources-->
+     <div class="modal fade example-modal-lg" id="add-resource-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add new Resource</h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formResource">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="name" class="form-control-label">Name *</label>
+                            <input type="text" class="form-control" id="nameResource" formControlName="name" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="availability" class="form-control-label">Availability *</label>
+                            <input type="number" class="form-control" id="availabilityResource" formControlName="availability" [max]="100" [min]="0" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="description" class="form-control-label">Description</label>
+                            <textarea class="form-control" id="descriptionResource" formControlName="description"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="resource-skills-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Project's skills</h5>
+                            <hr>
+                            <ul class="list-group skills-management-container scroll-style"
+                                dnd-droppable
+                                [allowDrop]="allowDropFunction(skillsNotAssigned)"
+                                (onDropSuccess)="removeSkill($event)">
+                                <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsNotAssigned"
+                                    dnd-draggable
+                                    [dragEnabled]="true"
+                                    [dragData]="(skill)">
+                                    {{skill.name}}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Resource's skills</h5>
+                            <hr>
+                            <ul class="list-group skills-management-container scroll-style"
+                                dnd-droppable
+                                [allowDrop]="allowDropFunction(skillsToAssign)"
+                                (onDropSuccess)="transferSkill($event)">
+                                <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsToAssign"
+                                    dnd-draggable
+                                    [dragEnabled]="true"
+                                    [dragData]="(skill)">
+                                    {{skill.name}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button [disabled]="!formResource.valid" (click)="addNewResource()" type="button" class="btn btn-primary">Add Resource</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal to edit resources-->
+     <div class="modal fade bd-example-modal-lg" id="edit-resource-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit new Resource</h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formEditResource">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="name" class="form-control-label">Name *</label>
+                            <input type="text" class="form-control" id="nameResourceEdit" formControlName="name" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="availability" class="form-control-label">Availability *</label>
+                            <input type="number" class="form-control" id="availabilityResourceEdit" formControlName="availability" [max]="100" [min]="0" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="description" class="form-control-label">Description</label>
+                            <textarea class="form-control" id="descriptionResourceEdit" formControlName="description"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="resource-skills-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Project's skills</h5>
+                            <hr>
+                            <ul class="list-group skills-management-container scroll-style"
+                                dnd-droppable
+                                [allowDrop]="allowDropFunction(skillsNotAssigned)"
+                                (onDropSuccess)="removeSkill($event)">
+                                <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsNotAssigned"
+                                    dnd-draggable
+                                    [dragEnabled]="true"
+                                    [dragData]="(skill)">
+                                   {{skill.name}}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Resource's skills</h5>
+                            <hr>
+                            <ul class="list-group skills-management-container scroll-style"
+                                dnd-droppable
+                                [allowDrop]="allowDropFunction(skillsToAssign)"
+                                (onDropSuccess)="transferSkill($event)">
+                                <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsToAssign"
+                                    dnd-draggable
+                                    [dragEnabled]="true"
+                                    [dragData]="(skill)">
+                                    {{skill.name}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button [disabled]="!formEditResource.valid" (click)="editResourceAPI()" type="button" class="btn btn-primary">Edit Resource</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal to inform errors -->
+    <div class="modal fade" id="error-modal">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Error Message</h5>
+            </div>
+            <div class="modal-body text-center">
+            <p id="error-text"></p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+</div>
+
