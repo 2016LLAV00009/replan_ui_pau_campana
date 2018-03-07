@@ -4,13 +4,12 @@ import { replanAPIUserService} from '../../services/replanAPIUser.service';
 import { User } from '../../models/user';
 import { AuthenticationService} from '../../services/AuthenticationService';
 
-
 @Component({
-  selector: 'app-perfile-atributes',
-  templateUrl: './perfile-atributes.component.html',
-  styleUrls: ['./perfile-atributes.component.css']
+  selector: 'app-perfile-other-accounts',
+  templateUrl: './perfile-other-accounts.component.html',
+  styleUrls: ['./perfile-other-accounts.component.css']
 })
-export class PerfileAtributesComponent  implements OnInit {
+export class PerfileOtherAccountsComponent  implements OnInit {
   model: any = {};
   loading = false;
   errorMessage : string;
@@ -24,17 +23,17 @@ export class PerfileAtributesComponent  implements OnInit {
       private authenticationService: AuthenticationService
    ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.model.nameDisplay = this.currentUser.displayName;
-    this.model.surnameDisplay = this.currentUser.displaySurname;
+    this.model.trelloAccount = this.currentUser.trelloAccount;
+    this.model.githubAccount = this.currentUser.githubAccount;
     }
   ngOnInit() {
       this.showError = false;
   }
-  updateInformation() {
+  updateAccounts() {
     this.showError = false;
     this.showCorrect = false;
     this.loading = true;
-      this.replanAPIUserService.updateUserInformation(this.model.nameDisplay, this.model.surnameDisplay)
+      this.replanAPIUserService.updateUserOtherAccounts(this.model.trelloAccount, this.model.githubAccount)
       .subscribe( data => {
         this.loading = false;
         this.errorMessage = data.message;
@@ -48,6 +47,4 @@ export class PerfileAtributesComponent  implements OnInit {
       })    
   }
 }
-
-
 

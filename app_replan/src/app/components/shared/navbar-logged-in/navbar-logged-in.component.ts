@@ -23,12 +23,15 @@ export class NavbarLoggedInComponent implements OnInit {
   }
 
   goToHome() {
-    this.currentIdProject = this.globaldata.getCurrentProjectId();
-    this.router.navigate( ['/projects/', this.currentIdProject] );
+   this.router.navigate( ['/home/'] );
   }
 
   goToProfile() {
     this.router.navigate( ['/profile/'] );
+  }
+
+  goToReplan() {
+    this.router.navigate( [''] );
   }
 
   logOut() {

@@ -88,14 +88,13 @@ export class replanAPIUserService {
       })
   }
 
-  modifyPassword(old_password: string, new_password: string) {
+  modifyPassword(oldP: string, newP: string) {
     const url = this.projectsURL + AppConstants.modify_passwordURL;
     let token = this.getToken();
     if (token) {
-      const body = { old_password: old_password, 
-                     new_password: new_password };
+      const body = { old_password: oldP, new_password: newP };
       const headers = new Headers({
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Content-Type': 'application/json',
         authorization: `Bearer ${token}`
 
       });
@@ -107,7 +106,46 @@ export class replanAPIUserService {
           return Observable.throw(error.json());
         })
     }
+  }
 
+
+  updateUserInformation(name: string, surname: string) {
+    const url = this.projectsURL + AppConstants.update_accountURL;
+    let token = this.getToken();
+    if (token) {
+      const body = { displayName: name, displaySurname: surname };
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.put(url, body, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
+
+  updateUserOtherAccounts(trelloAccount: string, githubAccount: string) {
+    const url = this.projectsURL + AppConstants.update_accountURL;
+    let token = this.getToken();
+    if (token) {
+      const body = { trelloAccount: trelloAccount, githubAccount: githubAccount };
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.put(url, body, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
   }
 
   getToken() {

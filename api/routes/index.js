@@ -17,6 +17,7 @@ api.post('/confirmation', userCtrl.confirmation)
 api.post('/valdiate_again', userCtrl.valdiate_again)
 api.post('/generate_password', userCtrl.generate_password)
 api.put('/modify_password', auth, userCtrl.modify_password)
+api.put('/update_account', auth, userCtrl.update_account)
 
 api.get('/private', auth, (req, res) => {
   res.status(200).send({ message: 'Tienes acceso'})

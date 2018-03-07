@@ -12,7 +12,8 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 import { AuthGuard } from './AuthGuard';
 import { PerfileAtributesComponent } from './components/perfile-atributes/perfile-atributes.component';
 import { PerfileModifyPasswordComponent } from './components/perfile-modify-password/perfile-modify-password.component';
-
+import { PerfileOtherAccountsComponent } from './components/perfile-other-accounts/perfile-other-accounts.component';
+import { PerfileSkillsComponent } from './components/perfile-skills/perfile-skills.component';
 
 const app_routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,6 +28,10 @@ const app_routes: Routes = [
   { path: 'home', component: MainPageComponent, canActivate: [AuthGuard]},
   { path: 'profile', component: PerfileAtributesComponent, canActivate: [AuthGuard]},
   { path: 'profile/modifyPassword', component: PerfileModifyPasswordComponent, canActivate: [AuthGuard]},
+  { path: 'profile/otherAccounts', component: PerfileOtherAccountsComponent, canActivate: [AuthGuard]},
+  { path: 'profile/skills', component: PerfileSkillsComponent, canActivate: [AuthGuard]},
+
+
   { path: '**', pathMatch: 'full', redirectTo: '' }
   
 ];

@@ -46,7 +46,6 @@ export class LoginComponent implements OnInit {
       this.replanAPIUserService.login(this.model.email, this.model.password)
       .subscribe( data => {
         console.log(data)
-        console.log(data.user)
         this.authenticationService.login_logic(data.user, data.token)
         this.router.navigate( ['/home'] );
 

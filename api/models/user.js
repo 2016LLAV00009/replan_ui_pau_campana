@@ -13,7 +13,9 @@ const UserSchema = new Schema({
   password: String,
   signupDate: {type: Date, default: Date.now()},
   lastLogin: Date,
-  confirmed: {type: Boolean, default: false}
+  confirmed: {type: Boolean, default: false},
+  trelloAccount:  {type: String, default: ""},
+  githubAccount: {type: String, default: ""}
 })
 
 UserSchema.pre('save', function(next) {

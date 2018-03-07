@@ -31,6 +31,8 @@ import { NavbarLoggedInComponent } from './components/shared/navbar-logged-in/na
 import { SidePerfileComponent } from './components/shared/side-perfile/side-perfile.component';
 import { PerfileAtributesComponent } from './components/perfile-atributes/perfile-atributes.component';
 import { PerfileModifyPasswordComponent } from './components/perfile-modify-password/perfile-modify-password.component';
+import { PerfileOtherAccountsComponent } from './components/perfile-other-accounts/perfile-other-accounts.component';
+import { PerfileSkillsComponent } from './components/perfile-skills/perfile-skills.component';
 
 @NgModule({
 
@@ -50,7 +52,9 @@ import { PerfileModifyPasswordComponent } from './components/perfile-modify-pass
     NavbarLoggedInComponent,
     SidePerfileComponent,
     PerfileAtributesComponent,
-    PerfileModifyPasswordComponent
+    PerfileModifyPasswordComponent,
+    PerfileOtherAccountsComponent,
+    PerfileSkillsComponent
   ],
   entryComponents: [],
   imports: [

@@ -32,6 +32,7 @@ export class PerfileModifyPasswordComponent implements OnInit {
       this.loading = true;
       this.replanAPIUserService.modifyPassword(this.model.actualPassword, this.model.newPassword1)
       .subscribe( data => {
+        this.loading = false;
         this.errorMessage = data.message;
         this.showCorrect = true;
 

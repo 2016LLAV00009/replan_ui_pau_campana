@@ -1,0 +1,35 @@
+<app-navbar-logged-in></app-navbar-logged-in>
+<div id="wrapper">
+  <app-side-perfile></app-side-perfile>
+
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+        <h1>Other accounts</h1>
+        <div class="container animated fadein">
+            <div class="col-xs-12 col-sm-12 col-lg-6  col-md-9">
+                <form name="form" (ngSubmit)="f.form.valid && updateAccounts()" #f="ngForm" novalidate>
+                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !trelloAccount.valid }">
+                        <label for="trelloAccount">Trello account username</label>
+                        <input type="text" class="form-control" name="trelloAccount"   [(ngModel)]="model.trelloAccount" #trelloAccount="ngModel" required />
+                         </div>
+
+
+                    <div class="form-group">
+                        <label for="githubAccount">Github account username</label>
+                        <input type="text" class="form-control" name="githubAccount" [(ngModel)]="model.githubAccount" #githubAccount="ngModel" required />
+                        </div>
+                    <div class="form-group">
+                        <button [disabled]="loading" class="btn btn-primary">Modify your information</button>
+                        <img *ngIf="loading" src="assets/loading.gif" />
+                    </div>
+            
+                
+                </form>
+                <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+                <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
+            </div>    
+            </div>
+    </div>
+</div>
+
+</div>

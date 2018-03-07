@@ -4,10 +4,37 @@
 
   <div id="page-content-wrapper">
     <div class="container-fluid">
-        <h1>Simple Sidebar</h1>
-        <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
-        <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
-        <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Toggle Menu</a>
+        <h1>Your information</h1>
+        <div class="container animated fadein">
+            <div class="col-xs-12 col-sm-12 col-lg-6  col-md-9">
+                <form name="form" (ngSubmit)="f.form.valid && updateInformation()" #f="ngForm" novalidate>
+                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !nameDisplay.valid }">
+                        <label for="nameDisplay">Name</label>
+                        <input type="text" class="form-control" name="nameDisplay"   [(ngModel)]="model.nameDisplay" #nameDisplay="ngModel" required />
+                        <div *ngIf="!nameDisplay.valid" class="alert alert-warning ">Your name is required</div>
+                    </div>
+
+
+                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !surnameDisplay.valid }">
+                        <label for="surnameDisplay">Surname</label>
+                        <input type="text" class="form-control" name="surnameDisplay" [(ngModel)]="model.surnameDisplay"  #surnameDisplay="ngModel" required />
+                        <div *ngIf="!surnameDisplay.valid" class="alert alert-warning ">Your surname is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <p><b>{{currentUser.email}}</b></p>
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="loading" class="btn btn-primary">Modify your information</button>
+                        <img *ngIf="loading" src="assets/loading.gif" />
+                    </div>
+            
+                
+                </form>
+                <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+                <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
+            </div>    
+            </div>
     </div>
 </div>
 

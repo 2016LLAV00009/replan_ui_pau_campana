@@ -106,7 +106,8 @@ function generate_password (req, res) {
 
 
 function modify_password (req, res) {
-  console.log("modify_password")
+  console.log("modify_password");
+    console.log(req.body);
   User.findById(req.user, (err, user) => {
     if (err) return res.status(500).send({ message: `Error while modifying password ${err}`})
     if (!user) return res.status(404).send({ message: 'Error while modifying password' })
@@ -137,6 +138,33 @@ function modify_password (req, res) {
 
 
 
+function update_account (req, res) {
+  console.log("update_account");
+    console.log(req.body);
+  User.findById(req.user, (err, user) => {
+    if (err) return res.status(500).send({ message: `Error while updating infromation ${err}`})
+    if (!user) return res.status(404).send({ message: 'Error while updating infromation ' })
+    User.findByIdAndUpdate(req.user, req.body, {new: true}, (err, userUpdated) => {
+      if (err) return res.status(500).send({message: `Error updating information${err}`})
+      user.password = undefined;
+      console.log(userUpdated);
+      let muser = userUpdated.toObject(); // swap for a plain javascript object instance
+      delete muser["_id"];
+      return res.status(200).send({
+        message: 'Information updated correctly',
+        user: muser,
+        token: service.createToken(userUpdated)
+      })
+    })
+  })
+}
+
+
+
+
+
+
+
 
 
 
@@ -158,14 +186,11 @@ function signIn (req, res) {
           user[0].password = undefined;
 
           let muser = user[0].toObject(); // swap for a plain javascript object instance
-          console.log(muser);
           delete muser["_id"];
-          console.log(".............")
-          console.log(muser)
           return res.status(200).send({
             message: 'You have logged in correctly',
             user: muser,
-            token: service.createToken(muser)
+            token: service.createToken(user[0])
           })
         }
       });
@@ -205,5 +230,6 @@ module.exports = {
   valdiate_again,
   generate_password,
   modify_password,
+  update_account,
   signIn
 }
