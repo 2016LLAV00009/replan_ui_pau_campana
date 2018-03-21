@@ -1,8 +1,245 @@
 <app-navbar-logged-in></app-navbar-logged-in>
-<p>
-  main-page works!
-</p>
-<p>
 
-  {{currentUser.displayName}}
-</p>
+<div id="loading_for_projects" class="loading_spinner"></div>
+<div class="projects-span data-founded" [hidden]="projects?.length !== 0"></div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-9 col-lg-9 padding">
+        <div class="row padding_top_row">
+            <div class="col-sm-12 col-md-7 col-lg-5 offset-sm-0 offset-md-2 offset-lg-0">
+              <h4 class="padding_top_text" >Do you want to start or join a project?</h4>
+            </div>
+            <div class="col-sm-12 col-md-3 col-lg-3 margin_butom">
+                <button type="button" class="btn btn-primary" (click)="createProject()">New project</button>
+            </div>
+            <div class="col-sm-12 col-md-3 col-lg-3">
+                <div id="imaginary_container"> 
+                    <div class="input-group stylish-input-group">
+                        <input type="text" class="form-control" id="search"  value="" placeholder="Search by id, email or name" >
+                        <span class="input-group-addon">
+                            <button (click)="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </button>  
+                        </span>
+                    </div>
+                </div>   
+            </div>
+        </div>
+        <div id="loading_for_projects_search" class="loading_spinner"></div>
+        <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+
+
+<!-- projects found -->
+<div  *ngIf= "carouselProjectFound"  class="panel panel-default marginFound">
+    <div class="panel-body ">
+      <div class="table-container">
+        <table class="table table-filter">
+            <tr>
+                <th class="center_text" style="width: 15%">Owner</th>
+                <th class="center_text" style="width: 15%">Privacity</th>
+                <th class="center_text" style="width: 30%">Members</th>
+                <th class="center_text">Name</th>
+              </tr>
+          <tbody>
+            <tr *ngFor="let project of showedprojectsFound; let i = index;" (click)="goToProject(project.id)">
+              <td>
+                <div>
+                    <i *ngIf="project?.owner == true" class="fa fa-user-plus icon "></i>
+                      <i *ngIf="project?.owner == false" class="fa fa-user icon "></i>
+                    
+                </div>
+              </td>
+              <td>
+                  <div>
+                      <i *ngIf="project?.is_private == true" class="fa fa-lock icon"></i>
+                      <i *ngIf="project?.is_private == false" class="fa fa-unlock icon"></i>
+                      
+                      
+                  </div>
+                </td>
+              <td>
+                <div class="star">
+                    {{project.members}} 
+                </div>
+              </td>
+              <td>
+                <div class="media">   
+                  <div class="media-body">
+                    <h4 [hidden]="project?.name.length > 30" class="title center_text"> {{project.name}} </h4>
+                    <h4 [hidden]="project?.name.length <= 30" class="title center_text">{{project.name.substring(0, 28) + '...'}}</h4>
+                    </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="margin_top" align="right">
+            <button class="btn btn-default button_border" (click)="changePageFound(pageFound-1)">
+                <i class="fa fa-step-backward fa-lg"></i> Previous
+            </button>
+            <button class="btn btn-default button_border" (click)="changePageFound(pageFound+1)">
+                <i class="fa fa-step-forward fa-lg"></i> Next
+            </button>
+          </div>
+      </div>
+    </div>
+
+
+</div>
+
+<div id="loading_for_projects_table" class="loading_spinner">
+</div>
+
+
+
+
+<!-- projects user -->
+  <div  id="carouselProject"  class="panel panel-default">
+    <div class="panel-body ">
+          <div class="row">
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                <h4 class= "margin_left">Your projects: ({{number_projects}})</h4>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                  <div class="pull-right">
+                      <div class="btn-group">
+                        <button  id="button_owner" type="button" class="btn btn-default btn-filter button_border" (click)="updateList('owner')">Owner</button>
+                        <button  id="button_member" type="button" class="btn btn-default btn-filter button_border" (click)="updateList('member')">Member</button>
+                        <button id="button_all"type="button" class="btn btn-filter button_border_pressed" (click)="updateList('all')" >All</button>
+                      </div>
+                    </div>
+              </div>
+            </div>
+    
+      <div class="table-container">
+        <table class="table table-filter">
+            <tr>
+                <th class="center_text" style="width: 15%">Owner</th>
+                <th class="center_text" style="width: 15%">Privacity</th>
+                <th class="center_text" style="width: 30%">Members</th>
+                <th class="center_text">Name</th>
+              </tr>
+          <tbody>
+            <tr *ngFor="let project of showedprojects; let i = index;" (click)="goToProject(project.id)" data-status="pagado">
+              <td>
+                <div>
+                    <i *ngIf="project?.owner == true" class="fa fa-user-plus icon "></i>
+                      <i *ngIf="project?.owner == false" class="fa fa-user icon "></i>
+                    
+                </div>
+              </td>
+              <td>
+                  <div>
+                      <i *ngIf="project?.is_private == true" class="fa fa-lock icon"></i>
+                      <i *ngIf="project?.is_private == false" class="fa fa-unlock icon"></i>
+                      
+                      
+                  </div>
+                </td>
+              <td>
+                <div class="star">
+                    {{project.members}} 
+                </div>
+              </td>
+              <td>
+                <div class="media">   
+                  <div class="media-body">
+                    <h4 [hidden]="project?.name.length > 30" class="title center_text"> {{project.name}} </h4>
+                    <h4 [hidden]="project?.name.length <= 30" class="title center_text">{{project.name.substring(0, 28) + '...'}}</h4>
+                    </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="margin_top" align="right">
+            <button class="btn btn-default button_border" (click)="changePage(page-1)">
+                <i class="fa fa-step-backward fa-lg"></i> Previous
+            </button>
+            <button class="btn btn-default button_border" (click)="changePage(page+1)">
+                <i class="fa fa-step-forward fa-lg"></i> Next
+            </button>
+          </div>
+      </div>
+    </div>
+</div>
+        
+    </div>
+    <div class="col-sm-12 col-md-3 col-lg-2" style="background-color:powderblue;">
+        barra lateral
+    </div>
+  </div>
+  
+
+  
+
+
+
+
+<!-- Modal to add projects -->
+<div class="modal fade bd-example-modal-lg" id="add-project-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add new Project</h5>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="formProject">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="name" class="form-control-label">Name *</label>
+                <input type="text" class="form-control" id="nameProject" formControlName="name" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="effort_unit" class="form-control-label">Effort unit *</label>
+                <input type="text" class="form-control" id="effort_unit" formControlName="effort_unit" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="hours_per_effort_unit" class="form-control-label">Hours per effort unit *</label>
+                <input type="number" class="form-control" id="hours_per_effort_unit" formControlName="hours_per_effort_unit" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="hours_per_week_and_full_time_resource" class="form-control-label">Hours per week and full time resource *</label>
+                <input type="number" class="form-control" id="hours_per_week_and_full_time_resource" formControlName="hours_per_week_and_full_time_resource" [max]="60" [min]="0" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <label for="description" class="form-control-label">Description</label>
+                <textarea class="form-control" id="descriptionProject" formControlName="description"></textarea>
+              </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="is_private"  ><input type="checkbox" id="is_private" formControlName="is_private" > Private project</label><br>
+                 
+                </div>
+              </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="clearModal()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button [disabled]="!formProject.valid" (click)="addNewProject()" type="button" class="btn btn-primary">Add Project</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal to inform errors -->
+<div class="modal fade" id="error-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Error Message</h5>
+        </div>
+        <div class="modal-body text-center">
+          <p id="error-text"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

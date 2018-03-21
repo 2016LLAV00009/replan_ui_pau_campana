@@ -10,6 +10,8 @@ export class AppConstants {
   public static generate_passwordURL = '/generate_password';  
   public static modify_passwordURL = '/modify_password';  
   public static update_accountURL = '/update_account';   
+  public static getProjectURL = '/project';  
+  public static searchProjectURL = '/project/search'; 
 
   public static LOW_FEATURE_EFFORT = 5;
   public static HIGH_FEATURE_EFFORT = 30;

@@ -129,6 +129,7 @@ export class replanAPIUserService {
   }
 
 
+
   updateUserOtherAccounts(trelloAccount: string, githubAccount: string) {
     const url = this.projectsURL + AppConstants.update_accountURL;
     let token = this.getToken();
@@ -139,6 +140,76 @@ export class replanAPIUserService {
         authorization: `Bearer ${token}`
       });
       return this.http.put(url, body, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
+  addProject(project: string) {
+    const url = this.projectsURL + AppConstants.getProjectURL;
+    let token = this.getToken();
+    let body = project;
+    if (token) {
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.put(url, body, { headers })
+        .map(res => {
+          console.log(res);
+          return res.json();
+        })
+        .catch((error: Response) => {
+          console.log(error);
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
+  getUserProjects() {
+    const url = this.projectsURL + AppConstants.getProjectURL;
+    let token = this.getToken();
+    if (token) {
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.get(url, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
+  searchProjects(name_query: string) {
+    const url = this.projectsURL + AppConstants.searchProjectURL;
+    let token = this.getToken();
+    var params: {name_query}
+    console.log("aqui" + params);
+    if (token) {
+      
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+
+      var data = {
+        name_query:name_query
+       };
+       
+       var config = {
+        params: data,
+        headers
+       };
+
+      return this.http.get(url, config)
         .map(res => {
           return res.json();
         })

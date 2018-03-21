@@ -107,7 +107,7 @@ function generate_password (req, res) {
 
 function modify_password (req, res) {
   console.log("modify_password");
-    console.log(req.body);
+    console.log(req.user);
   User.findById(req.user, (err, user) => {
     if (err) return res.status(500).send({ message: `Error while modifying password ${err}`})
     if (!user) return res.status(404).send({ message: 'Error while modifying password' })
