@@ -108,12 +108,69 @@ export class replanAPIUserService {
     }
   }
 
+  leaveGroup(id: string) {
+    const url = this.projectsURL + AppConstants.removeMemberURL;
+    let token = this.getToken();
+    if (token) {
+      const body = { id_project: id};
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.put(url, body, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
+  joinGroup(id: string) {
+    const url = this.projectsURL + AppConstants.addMemberURL;
+    let token = this.getToken();
+    if (token) {
+      const body = { id_project: id};
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.put(url, body, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
 
   updateUserInformation(name: string, surname: string) {
     const url = this.projectsURL + AppConstants.update_accountURL;
     let token = this.getToken();
     if (token) {
       const body = { displayName: name, displaySurname: surname };
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.put(url, body, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
+  answerProposal(id_notification: string, accepted: boolean) {
+    const url = this.projectsURL + AppConstants.answerProposalURL;
+    let token = this.getToken();
+    if (token) {
+      const body = { id_notification: id_notification, is_acepted: accepted };
       const headers = new Headers({
         'Content-Type': 'application/json',
         authorization: `Bearer ${token}`
@@ -187,6 +244,27 @@ export class replanAPIUserService {
         })
     }
   }
+
+
+  getUserNotifications() {
+    const url = this.projectsURL + AppConstants.getUserNotificationsURL;
+    let token = this.getToken();
+    if (token) {
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.get(url, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
+
 
   searchProjects(name_query: string) {
     const url = this.projectsURL + AppConstants.searchProjectURL;

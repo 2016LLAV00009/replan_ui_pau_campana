@@ -1,9 +1,9 @@
 @import "../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css";
 
-$color-dark-green: #005A31;
-$color-light-green: #A8CD1B;
-$color-hover-green: #CBE32D;
-$color-background: #F3FAB6;
+$color-dark-green: rgb(7, 43, 143);
+$color-light-green: rgb(70, 177, 204);
+$color-hover-green: rgb(45, 184, 227);
+$color-background: rgb(213, 236, 255);
 
 body {
   background-color: $color-background;

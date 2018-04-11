@@ -19,9 +19,14 @@ export class MainPageComponent implements OnInit {
   showError = false;
   carouselProjectFound = false;
   errorMessage = "";
+  pageNotification: number;
+  showednotifications: any[] = [];
   token: string;
   formProject: FormGroup;
   projects:  any[] = [];
+  notifications:  any[] = [];
+  subnotifications:  any[] = [];
+  number_notifications;
   projectsFound:  any[] = [];
   subprojects: any[] = [];
   showedprojects: any[] = [];
@@ -54,7 +59,9 @@ export class MainPageComponent implements OnInit {
     $('#loading_for_projects_search').hide();
     $('#loading_for_projects_table').hide();
     $('#loading_for_projects').show();
+    $('#loading_for_notifications').show();
     $('#addProjectDiv').addClass('margin_to_loading');
+    //projects
     this._replanAPIUserService.getUserProjects()
     .subscribe( data => {
       console.log(data)
@@ -70,6 +77,22 @@ export class MainPageComponent implements OnInit {
       $('#error-text').text('Error loading projects data. Try it again later.');
       $('#loading_for_projects').hide();
     })
+    //notifications
+    this._replanAPIUserService.getUserNotifications()
+    .subscribe( data => {
+      console.log(data)
+      $('#loading_for_notifications').hide();
+      this.notifications = data;
+      this.subnotifications = data;
+      this.changePageNotifications(0);
+      this.number_notifications = this.projects.length;
+
+    },  error => {
+      console.log(error)
+      $('#error-modal').modal();
+      $('#error-text').text('Error loading notifications data. Try it again later.');
+      $('#loading_for_notifications').hide();
+    }) 
   }
 
 
@@ -90,7 +113,18 @@ export class MainPageComponent implements OnInit {
     this._replanAPIUserService.addProject(JSON.stringify(this.formProject.value))
     .subscribe( data => {
       this.clearModal();
-      this._replanAPIUserService.getUserProjects()
+      this.getUsersAgain();
+    
+    },  error => {
+      console.log(error)
+      $('#error-modal').modal();
+      $('#error-text').text('Error creating the project. Try it again later.');
+      $('#loading_for_projects_table').hide();
+    })
+  }
+
+  getUsersAgain() {
+    this._replanAPIUserService.getUserProjects()
 
 
       .subscribe( data2 => {
@@ -107,14 +141,6 @@ export class MainPageComponent implements OnInit {
         $('#error-text').text('Error loading projects data. Try it again later.');
         $('#loading_for_projects_table').hide();
       })
-
-
-    },  error => {
-      console.log(error)
-      $('#error-modal').modal();
-      $('#error-text').text('Error creating the project. Try it again later.');
-      $('#loading_for_projects_table').hide();
-    })
   }
 
   updateList(filter_type) {
@@ -193,6 +219,22 @@ export class MainPageComponent implements OnInit {
     })
   }
 
+  changePageNotifications(num) {
+    if (num <= 0) {
+      this.pageNotification = 0;
+      this.showednotifications = this.subnotifications.slice(this.pageNotification *5, (this.pageNotification *5)+5); 
+    }
+    else if ((num*5) < this.subnotifications.length){
+      this.pageNotification = num;
+      this.showednotifications = this.subnotifications.slice(this.pageNotification *5, (this.pageNotification *5)+5); 
+    }
+  }
+
+
+
+
+
+
   changePage(num) {
     if (num <= 0) {
       this.page = 0;
@@ -217,4 +259,93 @@ export class MainPageComponent implements OnInit {
    // while(this.showedprojects.length < 5) this.showedprojects.push([]);
   }
 
+  joinGroup(id) {
+    this.showError = false;
+    $('#carouselProjectFound').hide();
+    $('#loading_for_projects_search').hide();
+    this._replanAPIUserService.joinGroup(id)
+    .subscribe( data => {
+      console.log(data)
+      this.getUsersAgain();
+      this.getNotificationsAgain();
+      this.carouselProjectFound = false;
+    },  error => {
+      this.carouselProjectFound = false;
+      console.log("error")
+      console.log(error)
+      this.showError = true;
+      this.errorMessage = error.message;
+      $('#loading_for_projects_search').hide();
+      this.canSearch = true;
+    })
+  }
+
+  leaveGroup(id) {
+
+    this.showError = false;
+    $('#carouselProjectFound').hide();
+    $('#loading_for_projects_search').hide();
+    this._replanAPIUserService.leaveGroup(id)
+    .subscribe( data => {
+      console.log(data)
+      this.getUsersAgain();
+    },  error => {
+      console.log(error)
+      this.showError = true;
+      this.errorMessage = error.message;
+    })
+  }
+
+acceptProposal(id) {
+  console.log(id);
+  this.answerProposal(id, true);
 }
+
+rejectProposal(id) {
+  this. answerProposal(id, false);
+}
+
+getNotificationsAgain() {
+  this._replanAPIUserService.getUserNotifications()
+  .subscribe( data => {
+    console.log(data)
+    $('#loading_for_notifications').hide();
+    $('#carouselNotifications').show();
+    this.notifications = data;
+    this.subnotifications = data;
+    this.changePageNotifications(0);
+    this.number_notifications = this.projects.length;
+
+  },  error => {
+    console.log(error)
+    $('#error-modal').modal();
+    $('#carouselNotifications').show();
+    $('#error-text').text('Error loading notifications data. Try it again later.');
+    $('#loading_for_notifications').hide();
+  }) 
+}
+
+answerProposal(id, accepted) {
+  $('#loading_for_notifications').show();
+  $('#carouselNotifications').hide();
+  this.showError = false;
+  $('#carouselProjectFound').hide();
+  $('#loading_for_projects_search').hide();
+  this._replanAPIUserService.answerProposal(id, accepted)
+  .subscribe( data => {
+    console.log(data)
+    this.carouselProjectFound = false;
+    if (accepted) this.getUsersAgain();
+    this.getNotificationsAgain();
+  },  error => {
+    this.carouselProjectFound = false;
+    console.log("error")
+    console.log(error)
+    this.showError = true;
+    this.errorMessage = error.message;
+    $('#loading_for_projects_search').hide();
+    this.canSearch = true;
+  })
+}
+}
+

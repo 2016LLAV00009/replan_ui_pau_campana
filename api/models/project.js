@@ -8,6 +8,7 @@ const ProjectSchema =  Schema({
   name: String,
   owner: { type: Schema.Types.ObjectId, ref: 'User' },
   members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  unconfirmedMembers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   is_private: Boolean
 })
 

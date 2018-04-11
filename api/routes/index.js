@@ -4,6 +4,7 @@ const express = require('express')
 const userCtrl = require('../controllers/user')
 const ProductCtrl = require('../controllers/product')
 const ProjectCtrl = require('../controllers/project')
+const NotificationCtrl = require('../controllers/notification')
 const auth = require('../middlewares/auth')
 const api = express.Router()
 
@@ -24,6 +25,12 @@ api.get('/project', auth, ProjectCtrl.getProjectsByUser)
 api.put('/project/addMember', auth, ProjectCtrl.addMember)
 api.put('/project/removeMember', auth, ProjectCtrl.removeMember)
 api.get('/project/search', auth, ProjectCtrl.searchProjects)
+api.get('/project/:projectId/notification', auth, NotificationCtrl.getNotificationsByProject)
+api.get('/project/allNotifications', NotificationCtrl.getAllNotifications)
+api.get('/project/userNotifications', auth, NotificationCtrl.getUserNotifications)
+api.put('/project/answerProposal', auth, ProjectCtrl.answerProposal)
+
+
 
 api.get('/private', auth, (req, res) => {
   res.status(200).send({ message: 'Tienes acceso'})
