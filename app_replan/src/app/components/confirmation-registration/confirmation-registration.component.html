@@ -3,20 +3,26 @@
         <h1 class="margin_bottom">Validation</h1>      
     </div>
 </div>
-<div class="container animated fadein">
-<div class="col-xs-12 col-sm-12 col-lg-6  col-md-9">
-  <img *ngIf="loading" src="assets/loading.gif" />
 
-  <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
-  <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
 
-  <div class="form-group">
-    <button (click)=login() class="btn btn-primary margin_bottom">Login</button>
-    <div *ngIf= "showError" class="margin_bottom" ><p>Sorry, something has not been as expected. Please, click the following link to receive agin an email to validate your account</p>
-      <button (click)=validate() class="btn btn-primary ">Validate your account</button>
+<div id="yourdiv" class="container">
+    <div class="row">
+        <form class="form-signin mg-btm">
+            <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+            <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
+        <div class="main">	
+            <button (click)=login() class="btn btn-primary margin_bottom">Login</button>
+        <span class="clearfix"></span>	
+        </div>
+        <div class="login-footer">
+                <div class="left-section">
+                        <a [routerLink]="['//send_validation']" class="btn btn-link">Validate your account again</a>
+                </div>
+        
+        </div>
+      </form>
     </div>
-    
 </div>
-  
-</div>
-</div>
+
+
+

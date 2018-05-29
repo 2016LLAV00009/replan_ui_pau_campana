@@ -6,13 +6,41 @@ const service = require('../services')
 const mailService = require('../services/mail')
 const bcrypt = require('bcrypt-nodejs')
 var generator = require('generate-password');
+const request = require('request');
+const replan_api = require('../routes/replan_api')
 
 function signUp (req, res) {
   console.log("signUp")
+  var jsonDataObj = {
+    'name': req.body.displayName + " " + req.body.displaySurname,
+    'description': "",
+    'availability': 100
+  };
+  request.post({
+    headers: {
+      'content-type': 'application/json'
+    },
+    url: replan_api.create_resource_url,
+    body: jsonDataObj,
+    json: true
+  }, (err, res_i, body) => {
+    if (err) {
+      return res.status(500).send({
+        error: 'Error creating project'
+      })
+    }
+    if (res_i.body.status) {
+      return res.status(500).send({
+        error: 'Error creating project, status: ' + res_i.body.status
+      })
+    }
+
+
   const user = new User ({
     email: req.body.email,
     displayName:  req.body.displayName,
     displaySurname: req.body.displaySurname,
+    resource: res_i.body.id,
     password: req.body.password
   })
 
@@ -27,6 +55,7 @@ function signUp (req, res) {
     sendMailConfirmation(token, user);
     return res.status(200).send({ message: 'We have sent you an email.  Please, confirm your account'})
   })
+});
 }
 
 

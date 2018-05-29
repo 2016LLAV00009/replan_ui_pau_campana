@@ -3,46 +3,59 @@
             <h1>Register</h1>      
         </div>
 </div>
-<div class="container animated fadein">
-<div class="col-xs-12 col-sm-12 col-lg-6  col-md-9">
-  <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
-      <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
-          <label for="displayName">First Name</label>
-          <input type="text" class="form-control" name="displayName" [(ngModel)]="model.displayName" #displayName="ngModel" required />
-          <div *ngIf="f.submitted && !displayName.valid" class="alert alert-warning">First Name is required</div>
-      </div>
-      <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
-          <label for="displaySurname">Last Name</label>
-          <input type="text" class="form-control" name="displaySurname" [(ngModel)]="model.displaySurname" #displaySurname="ngModel" required />
-          <div *ngIf="f.submitted && !displaySurname.valid" class="alert alert-warning">Last Name is required</div>
-      </div>
-      <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
-          <label for="email">Email</label>
-          <input type="email" class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required />
-          <div *ngIf="f.submitted && !email.valid" class="alert alert-warning">email is required</div>
-      </div>
-      <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required />
-          <div *ngIf="f.submitted && !password.valid" class="alert alert-warning">Password is required</div>
-      </div>
-      <div class="form-group">
-          <button [disabled]="loading" class="btn btn-primary">Register</button>
-          <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-          <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
-      </div>
-  </form>
 
-  <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+
+<div id="yourdiv" class="container">
+        <div class="row">
+            <form class="form-signin mg-btm">
+            <h3 class="heading-desc">
+            Sign up  </h3>
+
+              <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
 
   <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
 
-  <div *ngIf= "showCorrect" >
+  <div *ngIf= "showCorrect" class="final_message">
       <p>This proccess can take some minutes. If you do not receive an email, please click the following button</p>
         <button (click)=resend() class="btn btn-primary margin_bottom">Resend</button>
         <span></span>    
      <div *ngIf= "showError2" class="alert alert-danger">{{errorMessage2}}</div>
-        <div *ngIf= "showCorrect2" class="alert alert-success">{{errorMessage2}}</div>
-      </div>
-</div>
-</div>
+     <div *ngIf= "showCorrect2" class="alert alert-success">{{errorMessage2}}</div>
+    </div>
+            <div class="main">	
+                    <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                                <input type="text" class="form-control" name="displayName" placeholder="Enter your first name" autofocus [(ngModel)]="model.displayName" #displayName="ngModel" required />
+                                <div *ngIf="f.submitted && !displayName.valid" class="alert alert-warning">First Name is required</div>
+                            </div>
+                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                                <input type="text" class="form-control" name="displaySurname" placeholder="Enter your last name" [(ngModel)]="model.displaySurname" #displaySurname="ngModel" required />
+                                <div *ngIf="f.submitted && !displaySurname.valid" class="alert alert-warning">Last Name is required</div>
+                            </div>
+                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                                <input type="email" class="form-control" name="email" placeholder="Enter your email" [(ngModel)]="model.email" #email="ngModel" required />
+                                <div *ngIf="f.submitted && !email.valid" class="alert alert-warning">email is required</div>
+                            </div>
+                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                                <input type="password" class="form-control" name="password" placeholder="Enter your password"[(ngModel)]="model.password" #password="ngModel" required />
+                                <div *ngIf="f.submitted && !password.valid" class="alert alert-warning">Password is required</div>
+                            </div>
+                            <div class="form-group">
+                                <button [disabled]="loading" class="btn btn-primary">Register</button>
+                                <img *ngIf="loading" src="assets/loading.gif"  />
+                            </div>
+                        </form>	
+                        <span class="clearfix"></span>	
+                    </div>
+                    <div class="login-footer">
+                            <div class="left-section">
+                                    <a [routerLink]="['/login']" class="btn btn-link">I am a registered Replan user</a>
+                            </div>
+                    
+                    </div>
+            
+          </form>
+        </div>
+    </div>
+    
+

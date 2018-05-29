@@ -1,4 +1,4 @@
-<nav class="navbar navbar-fixed-left navbar-toggleable-md navbar-inverse bg-inverse bg-faded">
+<nav class="navbar navbar-fixed-left navbar-toggleable-md navbar-inverse bg-inverse bg-faded navbar-fixed-top">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -10,17 +10,12 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
 
-      <li class="nav-item nav-home active">
+      <li class="nav-item nav-homes">
         <a class="nav-link" (click)="goToHome()">Dashboard</a>
       </li>
       <li class="nav-item nav-settings">
         <a class="nav-link" (click)="goToProfile()">Profile</a>
       </li>
-      <li class="nav-item nav-settings">
-        <a class="nav-link" (click)="goToReplan()">Replan</a>
-      </li>
-      
-
     </ul>
 
     <a class="padding-icon margin-right-icon my-2 my-lg-0" (click)="logOut()">

@@ -7,6 +7,7 @@ import { AppConstants } from '../../app.constants';
 import { CustomValidators } from 'ng2-validation';
 import {DndModule} from 'ng2-dnd';
 import { Router } from '@angular/router';
+import { User } from '../../models/user';
 
 declare var $: any;
 
@@ -43,7 +44,10 @@ export class ProjectComponent implements OnInit {
   resourcesToAssign: any;
   releaseToEdit: any;
   resourcesModified: any;
-
+  formEditProject: any;
+  project: any;
+  idProject_127: any;
+  currentUser: User;
   innerHeight: any;
   innerWidth: any;
 
@@ -51,6 +55,8 @@ export class ProjectComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private router: Router,
               private globaldata: GlobalDataService) {
+                this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                this.idProject_127 = 127;
                 this.activatedRoute.params.subscribe( params => {
                   this.idProject = params['id'];
                   this.globaldata.setCurrentProjectId(this.idProject);
@@ -60,9 +66,10 @@ export class ProjectComponent implements OnInit {
                       $('#error-modal').modal();
                       $('#error-text').text('Error loading project data. Try it again later.');
                     }
+                    this.project = data;
                     $('.title-project').text(data.name);
                   });
-                  this._replanAPIService.getSkillsProject(this.idProject)
+                  this._replanAPIService.getSkillsProject(this.idProject_127)
                   .subscribe( data => {
                     if (data.toString() === 'e') {
                       $('#error-modal').modal();
@@ -70,7 +77,7 @@ export class ProjectComponent implements OnInit {
                     }
                     this.skills = data;
                   });
-                  this._replanAPIService.getResourcesProject(this.idProject)
+                  this._replanAPIService.getResourcesProject(this.idProject_127)
                   .subscribe( data => {
                     if (data.toString() === 'e') {
                       $('#error-modal').modal();
@@ -109,6 +116,11 @@ export class ProjectComponent implements OnInit {
                   'description': new FormControl(''),
                   'starts_at': new FormControl(''),
                   'deadline': new FormControl('')
+                });
+                this.formEditProject = new FormGroup({
+                  'effort_unit': new FormControl(''),
+                  'hours_per_effort_unit': new FormControl(''),
+                  'hours_per_week_and_full_time_resource': new FormControl('')
                 });
 
   }
@@ -159,6 +171,35 @@ export class ProjectComponent implements OnInit {
       self.clearAddReleaseModal();
     });
   }
+
+  editProject() {
+    $('#edit-project-modal').modal();
+    this.formEditProject.controls['effort_unit'].setValue(this.project.effort_unit);
+    this.formEditProject.controls['hours_per_effort_unit'].setValue(this.project.hours_per_effort_unit);
+    this.formEditProject.controls['hours_per_week_and_full_time_resource'].setValue(this.project.hours_per_week_and_full_time_resource);
+}
+
+editProjectAPI() {
+  this.formEditProject.value.effort_unit = $('#edit_effort_unit').val();
+  this.formEditProject.value.hours_per_effort_unit = $('#edit_hours_per_effort_unit').val();
+  this.formEditProject.value.hours_per_week_and_full_time_resource = $('#edit_hours_per_week_and_full_time_resource').val();
+  $('#edit-project-modal').modal('hide');
+  this._replanAPIService.editProject(JSON.stringify(this.formEditProject.value), this.idProject)
+    .subscribe( data => {
+      if (data.toString() === 'e') {
+        $('#error-modal').modal();
+        $('#error-text').text('Error editing the project. Try it again later.');
+      }
+      this._replanAPIService.getProject(this.idProject)
+        .subscribe( data2 => {
+          if (data2.toString() === 'e') {
+            $('#error-modal').modal();
+            $('#error-text').text('Error loading project data. Try it again later.');
+          }
+          this.project = data2;
+        });
+    });
+}
 
   getLowFeatureEffort() {
     return AppConstants.LOW_FEATURE_EFFORT;
@@ -582,11 +623,13 @@ export class ProjectComponent implements OnInit {
       $('.releases-container').hide();
       this._replanAPIService.editRelease(JSON.stringify(this.formEditRelease.value), this.idProject, this.releaseToEdit.id)
           .subscribe( data => {
+
             if (data.toString() === 'e') {
               $('#error-modal').modal();
               $('#error-text').text('Error editing the release. Try it again later.');
             }
             if (this.resourcesModified) {
+ 
               this._replanAPIService.deleteResourcesFromRelease(this.idProject, this.releaseToEdit.id, this.releaseToEdit.resources)
               .subscribe( data2 => {
                 if (data2.toString() === 'e') {
@@ -600,8 +643,13 @@ export class ProjectComponent implements OnInit {
                   };
                   objArray.push(obj);
                 });
+                
+                console.log(objArray);
+                console.log(this.idProject);
+                console.log(this.releaseToEdit.id)
                 this._replanAPIService.addResourcesToRelease(JSON.stringify(objArray), this.idProject, this.releaseToEdit.id)
                 .subscribe( data3 => {
+                  console.log(data3);
                   if (data3.toString() === 'e') {
                     $('#error-modal').modal();
                     $('#error-text').text('Error editing the release. Try it again later.');

@@ -9,6 +9,7 @@ const UserSchema = new Schema({
   email: { type: String, unique: true, lowercase: true},
   displayName: String,
   displaySurname: String,
+  resource: String,
   avatar: String,
   password: String,
   signupDate: {type: Date, default: Date.now()},

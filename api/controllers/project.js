@@ -150,8 +150,15 @@ function addMember(req, res) {
         })
       }
     })
-    if (projects[0].is_private) projects[0].unconfirmedMembers.push(req.user);
-    else projects[0].members.push(req.user);
+    var m = "";
+    if (projects[0].is_private) {
+      projects[0].unconfirmedMembers.push(req.user);
+      m = 'Request to join sent correctly';
+    }
+    else {
+      projects[0].members.push(req.user);
+      m = 'Member added correctly';
+    }
     console.log(projects[0]);
     projects[0].save((err, projectStored) => {
       if (err) return res.status(500).send({
@@ -159,7 +166,7 @@ function addMember(req, res) {
       })
 
       return res.status(200).send({
-        message: 'Member added correctly'
+        message: m
       })
     })
   })

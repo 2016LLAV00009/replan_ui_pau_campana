@@ -322,13 +322,7 @@ export class replanAPIService {
   deleteSkillsFromResource(idProject: number, idResource: number, skills: any) {
     const url = this.projectsURL + idProject + '/resources/' + idResource + '/skills';
     let params = '?skillId=';
-    skills.forEach((item, index) => {
-      if (index === skills.length - 1) {
-        params += skills[index].id;
-      } else {
-        params += skills[index].id + ',';
-      }
-    });
+    params += skills;
     return this.http.delete( url + params )
       .map(res => res.json())
       .catch(error => 'e');

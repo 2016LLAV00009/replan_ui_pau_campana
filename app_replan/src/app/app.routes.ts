@@ -14,10 +14,12 @@ import { PerfileAtributesComponent } from './components/perfile-atributes/perfil
 import { PerfileModifyPasswordComponent } from './components/perfile-modify-password/perfile-modify-password.component';
 import { PerfileOtherAccountsComponent } from './components/perfile-other-accounts/perfile-other-accounts.component';
 import { PerfileSkillsComponent } from './components/perfile-skills/perfile-skills.component';
+import { PerfileAvailabilityComponent } from './components/perfile-availability/perfile-availability.component';
+
 
 const app_routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'projects/:id', component: ProjectComponent },
+  { path: 'projects/:id', component: ProjectComponent, canActivate: [AuthGuard]},
   { path: 'projects/:id/settings', component: ProjectSettingsComponent },
   { path: 'projects/:id/releases/:id2/plan', component: PlanComponent },
   { path: 'login', component: LoginComponent },
@@ -30,6 +32,7 @@ const app_routes: Routes = [
   { path: 'profile/modifyPassword', component: PerfileModifyPasswordComponent, canActivate: [AuthGuard]},
   { path: 'profile/otherAccounts', component: PerfileOtherAccountsComponent, canActivate: [AuthGuard]},
   { path: 'profile/skills', component: PerfileSkillsComponent, canActivate: [AuthGuard]},
+  { path: 'profile/availability', component: PerfileAvailabilityComponent, canActivate: [AuthGuard]},
 
 
   { path: '**', pathMatch: 'full', redirectTo: '' }

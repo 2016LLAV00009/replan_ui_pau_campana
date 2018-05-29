@@ -1,0 +1,16 @@
+.padding {
+    margin-left: 5px;
+    margin-top: 10px;
+  }
+  
+  a {
+    color: rgb(0, 0, 0);
+  }
+  a:hover {
+     color: rgb(54, 54, 54)
+  }
+  
+  div.spacing {
+    line-height: 1.8;
+    font-size: 19px;
+  }

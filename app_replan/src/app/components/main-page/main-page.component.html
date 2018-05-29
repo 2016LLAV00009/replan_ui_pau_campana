@@ -15,7 +15,7 @@
             <div class="col-sm-12 col-md-3 col-lg-3">
                 <div id="imaginary_container"> 
                     <div class="input-group stylish-input-group">
-                        <input type="text" class="form-control" id="search"  value="" placeholder="Search by id, email or name" >
+                        <input type="text" class="form-control" id="search"  value="" placeholder="Search by id or name" >
                         <span class="input-group-addon">
                             <button (click)="search()">
                                 <span><i class="fa fa-search"></i></span>
@@ -27,6 +27,7 @@
         </div>
         <div id="loading_for_projects_search" class="loading_spinner"></div>
         <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+        <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
 
 
 <!-- projects found -->
@@ -129,7 +130,7 @@
               <th class="center_text">Actions</th>
               </tr>
           <tbody>
-            <tr *ngFor="let project of showedprojects; let i = index;" (click)="goToProject(project.id)" data-status="pagado">
+            <tr *ngFor="let project of showedprojects; let i = index;" data-status="pagado">
               <td>
                 <div>
                     <i *ngIf="project?.owner == true" class="fa fa-user-plus icon "></i>
@@ -159,9 +160,12 @@
                 </div>
               </td>
               <td>
-                <div  *ngIf="project?.owner == false" align="center"> 
-                    <button class="btn btn-default btn-sm button_border_danger" (click)="leaveGroup(project.id)">
-                        <i class="fa fa-sign-out"></i> Leave group
+                <div   align="center"> 
+                    <button *ngIf="project?.owner == false" class="btn btn-default btn-sm button_border_danger" (click)="leaveGroup(project.id)">
+                        <i class="fa fa-sign-out"></i> Leave
+                    </button>
+                    <button class="btn btn-default btn-sm button_border" (click)="goToProject(project.id)">
+                        <i class="fa fa-sign-out"></i> Enter
                     </button>
                 </div>
               </td>
@@ -217,16 +221,6 @@
                         </button>
                     </div>
                     <div class="media">   
-                        <div class="media-body">
-                            <h4 *ngIf="notification?.diffTime < 1" class="TimeNotification right_aligment">Now</h4>
-                            <h4 *ngIf="notification?.diffTime == 1" class="TimeNotification right_aligment">1 minute ago</h4>
-                            <h4 *ngIf="notification?.diffTime > 1 && notification?.diffTime < 60 " class="TimeNotification right_aligment">{{notification.diffTime}} minutes ago</h4>
-                            <h4 *ngIf="notification?.diffTime >= 60 && notification?.diffTime < 120"class="TimeNotification right_aligment">{{(notification.diffTime/60).toString().substring(0,1)}} hour ago</h4>
-                            <h4 *ngIf="notification?.diffTime >= 120 && notification?.diffTime < 1440" class="TimeNotification right_aligment">{{(notification.diffTime/60).toString().substring(0,1)}} hours ago</h4>
-                            <h4 *ngIf="notification?.diffTime >=1440 && notification?.diffTime < 2880" class="TimeNotification right_aligment">{{(notification.diffTime/1440) }} day ago</h4>
-                            <h4 *ngIf="notification?.diffTime >=2880" class="TimeNotification right_aligment">{{(notification.diffTime/1440) }} days ago</h4>
-                                             
-                        </div>
                       </div>
                     </td>
 

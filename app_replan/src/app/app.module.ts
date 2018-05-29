@@ -33,6 +33,7 @@ import { PerfileAtributesComponent } from './components/perfile-atributes/perfil
 import { PerfileModifyPasswordComponent } from './components/perfile-modify-password/perfile-modify-password.component';
 import { PerfileOtherAccountsComponent } from './components/perfile-other-accounts/perfile-other-accounts.component';
 import { PerfileSkillsComponent } from './components/perfile-skills/perfile-skills.component';
+import { PerfileAvailabilityComponent } from './components/perfile-availability/perfile-availability.component';
 
 @NgModule({
 
@@ -54,7 +55,8 @@ import { PerfileSkillsComponent } from './components/perfile-skills/perfile-skil
     PerfileAtributesComponent,
     PerfileModifyPasswordComponent,
     PerfileOtherAccountsComponent,
-    PerfileSkillsComponent
+    PerfileSkillsComponent,
+    PerfileAvailabilityComponent
   ],
   entryComponents: [],
   imports: [

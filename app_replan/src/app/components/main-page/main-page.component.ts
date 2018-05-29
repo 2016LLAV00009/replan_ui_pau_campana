@@ -17,6 +17,7 @@ declare var $: any;
 export class MainPageComponent implements OnInit {
   currentUser: User;
   showError = false;
+  showCorrect = false;
   carouselProjectFound = false;
   errorMessage = "";
   pageNotification: number;
@@ -98,6 +99,7 @@ export class MainPageComponent implements OnInit {
 
   goToProject(id) {
     console.log("dins: " + id); 
+    this.router.navigate( ['/projects', id] );
   }
 
   createProject() {
@@ -194,6 +196,7 @@ export class MainPageComponent implements OnInit {
   search() {
     this.canSearch = false;
     this.showError = false;
+    this.showCorrect = false;
     $('#carouselProjectFound').hide();
     $('#loading_for_projects_search').hide();
     var inputValue = (<HTMLInputElement>document.getElementById("search")).value;
@@ -261,11 +264,14 @@ export class MainPageComponent implements OnInit {
 
   joinGroup(id) {
     this.showError = false;
+    this.showCorrect = false;
     $('#carouselProjectFound').hide();
     $('#loading_for_projects_search').hide();
     this._replanAPIUserService.joinGroup(id)
     .subscribe( data => {
       console.log(data)
+      this.showCorrect = true;
+      this.errorMessage = data.message;
       this.getUsersAgain();
       this.getNotificationsAgain();
       this.carouselProjectFound = false;
@@ -281,7 +287,7 @@ export class MainPageComponent implements OnInit {
   }
 
   leaveGroup(id) {
-
+    this.showCorrect = false;
     this.showError = false;
     $('#carouselProjectFound').hide();
     $('#loading_for_projects_search').hide();
@@ -329,6 +335,7 @@ answerProposal(id, accepted) {
   $('#loading_for_notifications').show();
   $('#carouselNotifications').hide();
   this.showError = false;
+  this.showCorrect = false;
   $('#carouselProjectFound').hide();
   $('#loading_for_projects_search').hide();
   this._replanAPIUserService.answerProposal(id, accepted)

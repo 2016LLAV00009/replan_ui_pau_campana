@@ -1,33 +1,50 @@
-<div class="jumbotron not-margin">
+<div class="jumbotron not-margin" >
         <div class="jumbo-container">
             <h1>Login</h1>      
         </div>
 </div>
-<div class="container animated fadein">
-<div class="col-xs-12 col-sm-12 col-lg-6  col-md-9">
-    <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
-            <label for="email">Email</label>
-            <input type="text" class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required />
-            <div *ngIf="f.submitted && !email.valid" class="alert alert-warning ">Email is required</div>
-        </div>
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required />
-            <div *ngIf="f.submitted && !password.valid" class="alert alert-warning">Password is required</div>
-        </div>
-        <div class="form-group">
-            <button [disabled]="loading" class="btn btn-primary">Login</button>
-            <img *ngIf="loading" src="assets/loading.gif" />
-            <a [routerLink]="['/register']" class="btn btn-link">Register</a>
-        </div>
 
-    
-    </form>
-    <a [routerLink]="['/send_new_password']" class="btn btn-link">I don't remember my password</a>
-    <a [routerLink]="['/send_validation']" class="btn btn-link">I haven't received any email confirmation</a>
+<div id="yourdiv" class="container">
+	<div class="row">
+		<form class="form-signin mg-btm">
+    	<h3 class="heading-desc">
+        Welcome </h3>
+        <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+		<div class="main">	
+         
+        <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" name="email"  placeholder="Enter your email" autofocus [(ngModel)]="model.email" #email="ngModel" required />
+                <div *ngIf="f.submitted && !email.valid" class="alert alert-warning ">Email is required</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Enter your password" [(ngModel)]="model.password" #password="ngModel" required />
+                <div *ngIf="f.submitted && !password.valid" class="alert alert-warning">Password is required</div>
+            </div>
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary">Login</button>
+                <img *ngIf="loading" src="assets/loading.gif" />
+                <a [routerLink]="['/register']" class="btn btn-link">Register</a>
+            </div>
+        </form>
 
-    <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
-    
-</div>    
+
+		<span class="clearfix"></span>	
+        </div>
+		<div class="login-footer">
+                <div class="left-section">
+                        <a [routerLink]="['/send_new_password']" class="btn btn-link">I don't remember my password</a>
+                        <a [routerLink]="['/send_validation']" class="btn btn-link">I haven't received any email confirmation</a>
+                    
+                      
+                        
+                </div>
+		
+		</div>
+      </form>
+	</div>
 </div>
+
+

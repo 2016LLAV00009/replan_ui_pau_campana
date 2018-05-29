@@ -5,7 +5,7 @@
                 <div class="spacing">
                         <ul class="sidebar-nav">
                             <li>
-                                <a [routerLink]="['/profile']"><b>About you</b></a>
+                                <a [routerLink]="['/profile']">About you</a>
                             </li>
                             <li>
                                 <a [routerLink]="['/profile/modifyPassword']">Modify Password</a>
@@ -15,7 +15,7 @@
                                 <a [routerLink]="['/profile/skills']">Skills</a>
                             </li>
                             <li>
-                                <a [routerLink]="['/profile/availability']">Availability</a>
+                                <a [routerLink]="['/profile/availability']"><b>Availability</b></a>
                             </li>
                             <li>
                                 <a [routerLink]="['/profile/otherAccounts']">Other accounts</a>
@@ -26,28 +26,21 @@
         <div class="col-sm-12 col-md-9 col-lg-9">
                     <div id="page-content-wrapper">
                             <div class="container-fluid">
-                                    <h1>Your information</h1>
-                                    <div class="container animated fadein">
+                                    <h1>Availability</h1>
+                                    <div *ngIf= "carregant">
+                                        <img src="assets/loading.gif" />
+                                    </div>
+                                    <div *ngIf= "!carregant" class="container animated fadein">
                                         <div class="col-xs-12 col-sm-12 col-lg-6  col-md-9">
                                             <form name="form" (ngSubmit)="f.form.valid && updateInformation()" #f="ngForm" novalidate>
-                                                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !nameDisplay.valid }">
-                                                    <label for="nameDisplay">Name</label>
-                                                    <input type="text" class="form-control" name="nameDisplay"   [(ngModel)]="model.nameDisplay" #nameDisplay="ngModel" required />
-                                                    <div *ngIf="!nameDisplay.valid" class="alert alert-warning ">Your name is required</div>
+                                                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !availability.valid }">
+                                                    <label for="availability">Introduce your availability (from 0 to 100%) </label>
+                                                    <input type="number" class="form-control" name="availability"   [(ngModel)]="model.availability" #availability="ngModel"  required />
+                                                    <div *ngIf="!availability.valid" class="alert alert-warning ">Your availability is required</div>
                                                 </div>
                             
-                            
-                                                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !surnameDisplay.valid }">
-                                                    <label for="surnameDisplay">Surname</label>
-                                                    <input type="text" class="form-control" name="surnameDisplay" [(ngModel)]="model.surnameDisplay"  #surnameDisplay="ngModel" required />
-                                                    <div *ngIf="!surnameDisplay.valid" class="alert alert-warning ">Your surname is required</div>
-                                                </div>
                                                 <div class="form-group">
-                                                    <label for="email">Email</label>
-                                                    <p><b>{{currentUser.email}}</b></p>
-                                                </div>
-                                                <div class="form-group">
-                                                    <button [disabled]="loading" class="btn btn-primary">Modify your information</button>
+                                                    <button [disabled]="loading" class="btn btn-primary">Modify</button>
                                                     <img *ngIf="loading" src="assets/loading.gif" />
                                                 </div>
                                         
@@ -55,7 +48,7 @@
                                             </form>
                                             <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
                                             <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
-                                        </div>    
+                                       </div>    
                                         </div>
                                 </div>
                     </div>

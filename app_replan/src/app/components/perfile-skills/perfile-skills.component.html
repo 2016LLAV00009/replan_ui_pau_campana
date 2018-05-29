@@ -1,11 +1,250 @@
 <app-navbar-logged-in></app-navbar-logged-in>
-<div id="wrapper">
-  <app-side-perfile></app-side-perfile>
+<div class="container padding">
+<div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3">  
+                <div class="spacing">
+                        <ul class="sidebar-nav">
+                            <li>
+                                <a [routerLink]="['/profile']">About you</a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/profile/modifyPassword']">Modify Password</a>
+                            </li>
+                  
+                            <li>
+                                <a [routerLink]="['/profile/skills']"><b>Skills</b></a>
+                            </li>
+                            <li>
+                                    <a [routerLink]="['/profile/availability']">Availability</a>
+                                </li>
+                            <li>
+                                <a [routerLink]="['/profile/otherAccounts']">Other accounts</a>
+                            </li>
+                        </ul>
+                    </div>
+            </div>
+            <div class="col-sm-12 col-md-9 col-lg-9">
+                    <div id="page-content-wrapper">
+                            <div class="container-fluid">
+                                    <h1>My skills</h1>
+                                    <hr>
+                            
+                                    <div class="resources-span data-founded" [hidden]="resources?.length !== 0"></div>
+                                    <div id="loading_for_resources" class="loading_spinner"></div>
+                                        <div *ngFor="let resource of resources">
+                                               
+                                            <div *ngIf="resource?.id == currentUser.resource" > 
+                                                    <div class="no_found" align="center" *ngIf="resource.skills.length === 0">
+                                                        <h4 style="text-align:center;">You don't have any skill</h4></div>
+                                                        <div class="card-group row resources-container">
+                                        <div class="col-sm-4 skill-card" *ngFor="let skill of resource.skills; let i = index"> 
+                                            <div class="card text-center" 
+                                                [ngClass]="getClass(resource.availability)">
+                                                <div class="card-block">
+                                                    <h4 [hidden]="resource?.name.length > 12" class="card-title resource-title">{{skill.name}}</h4>
+                                                    <h4 [hidden]="resource?.name.length <= 12" class="card-title resource-title" title="{{skill.name}}">{{skill.name.substring(0, 11) + '...'}}</h4>
+                        
+                                                    <div class="icons-resources-content">
+                                                        <a class="padding-icon" (click)="deleteSkillResource(skill.id)">
+                                                            <i class="fa fa-trash-o fa-2x" aria-hidden="true" title="Delete Skill"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                       
+                                        </div>
+                                    </div>
+                                </div>
+                                    </div>
+                            
+                                    <div id="addResourceDiv" class="text-center">
+                                        <button (click)="editResource()" type="button" class="btn add-btn" title="Add Resource">+</button>
+                                    </div>
+                        
+                        
+                        
+                                <h1>All skills</h1>
+                                <hr>
+                        
+                                <div class="skills-span data-founded" [hidden]="skills?.length !== 0"></div>
+                                <div id="loading_for_skills" class="loading_spinner"></div>
+                        
+                                            <div class="card-group row skills-container">
+                                    <div class="col-sm-4 skill-card" *ngFor="let skill of skills"> 
+                        
+                        
+                        
+                                        <div class="card text-center">
+                                            <div class="card-block">
+                                                <h4 [hidden]="skill?.name.length > 20" class="card-title skill-title">{{skill.name}}</h4>
+                                                <h4 [hidden]="skill?.name.length <= 20" class="card-title skill-title" title="{{skill.name}}">{{skill.name.substring(0, 19) + '...'}}</h4>
+                                                <p class="card-text" *ngIf="skill.description.length === 0">No Description</p>
+                                                <p [hidden]="skill?.description.length > 28" class="card-text">{{skill.description}}</p>
+                                                <p [hidden]="skill?.description.length <= 28" class="card-text" title="{{skill.description}}">{{skill.description.substring(0, 26) + '...'}}</p>
+                                                <div [hidden]=true class="icons-resources-content">
+                                                        <a class="padding-icon" (click)="deleteSkill(skill.id)">
+                                                            <i class="fa fa-trash-o fa-2x" aria-hidden="true" title="Delete Skill"></i>
+                                                        </a>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                                <div id="addSkillDiv" class="text-center">
+                                    <button (click)="addSkillModal()" type="button" class="btn add-btn" title="Add Skill">+</button>
+                                </div>
+                        
+                        
+                                
+                            </div>
+                        </div>
+                           <!-- Modal to add skills -->
+    <div class="modal fade" id="add-skill-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new Skill</h5>
 
-  <div id="page-content-wrapper">
-    <div class="container-fluid">
-        <h1>My skills</h1>
-    </div>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="formSkill">
+                        <div class="form-group">
+                            <label for="name" class="form-control-label">Name *</label>
+                            <input type="text" class="form-control" id="nameSkill" formControlName="name" required (input)="onSearchChange($event.target.value)">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="form-control-label">Description</label>
+                            <textarea class="form-control" id="descriptionSkill" formControlName="description"></textarea>
+                        </div>
+                    </form>
+                    <h6 class="recomendation"><b>{{recomendation}}</b></h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button [disabled]="!formSkill.valid" (click)="addNewSkill()" type="button" class="btn btn-primary">Add Skill</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    
+        <!--Modal to add skills-->
+         <div class="modal fade example-modal-lg" id="add-resource-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-body">
+                    <div class="resource-skills-container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Others skills</h5>
+                                <hr>
+                                <ul class="list-group skills-management-container scroll-style"
+                                    dnd-droppable
+                                    [allowDrop]="allowDropFunction(skillsNotAssigned)"
+                                    (onDropSuccess)="removeSkill($event)">
+                                    <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsNotAssigned"
+                                        dnd-draggable
+                                        [dragEnabled]="true"
+                                        [dragData]="(skill)">
+                                        {{skill.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>My skills</h5>
+                                <hr>
+                                <ul class="list-group skills-management-container scroll-style"
+                                    dnd-droppable
+                                    [allowDrop]="allowDropFunction(skillsToAssign)"
+                                    (onDropSuccess)="transferSkill($event)">
+                                    <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsToAssign"
+                                        dnd-draggable
+                                        [dragEnabled]="true"
+                                        [dragData]="(skill)">
+                                        {{skill.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button [disabled]="!formResource.valid" (click)="addNewSkillsUser()" type="button" class="btn btn-primary">Save</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    
+        <!--Modal to edit resources-->
+         <div class="modal fade bd-example-modal-lg" id="edit-resource-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+            
+                <div class="modal-body">
+                    
+                    <div class="resource-skills-container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Other skills</h5>
+                                <hr>
+                                <ul class="list-group skills-management-container scroll-style"
+                                    dnd-droppable
+                                    [allowDrop]="allowDropFunction(skillsNotAssigned)"
+                                    (onDropSuccess)="removeSkill($event)">
+                                    <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsNotAssigned"
+                                        dnd-draggable
+                                        [dragEnabled]="true"
+                                        [dragData]="(skill)">
+                                       {{skill.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>My skills</h5>
+                                <hr>
+                                <ul class="list-group skills-management-container scroll-style"
+                                    dnd-droppable
+                                    [allowDrop]="allowDropFunction(skillsToAssign)"
+                                    (onDropSuccess)="transferSkill($event)">
+                                    <li class="list-group-item list-group-item-action" *ngFor="let skill of skillsToAssign"
+                                        dnd-draggable
+                                        [dragEnabled]="true"
+                                        [dragData]="(skill)">
+                                        {{skill.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button [disabled]="!formEditResource.valid" (click)="editResourceAPI()" type="button" class="btn btn-primary">Save</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    
+    
+        <!-- Modal to inform errors -->
+        <div class="modal fade" id="error-modal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Error Message</h5>
+                </div>
+                <div class="modal-body text-center">
+                <p id="error-text"></p>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+                    </div>
 </div>
 
 </div>

@@ -109,16 +109,7 @@ export class ProjectSettingsComponent implements OnInit {
     });
   }
 
-  getClass(availability: string) {
-    const num = parseFloat(availability);
-    if (num >= AppConstants.LOW_RESOURCE_AVAILABILITY && num <= AppConstants.MEDIUM_RESOURCE_AVAILABILITY) {
-      return 'card-danger';
-    } else if (num > AppConstants.MEDIUM_RESOURCE_AVAILABILITY && num <= AppConstants.HIGH_RESOURCE_AVAILABILITY) {
-      return 'card-warning';
-    } else {
-        return 'card-success';
-    }
-  }
+
 
   editProject() {
       $('#edit-project-modal').modal();
