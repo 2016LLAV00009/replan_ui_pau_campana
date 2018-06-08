@@ -16,7 +16,8 @@ export class AppConstants {
   public static removeMemberURL = '/project/removeMember'; 
   public static getUserNotificationsURL = '/project/UserNotifications'; 
   public static answerProposalURL = '/project/answerProposal'; 
-
+  public static getAllUsersURL = '/users'; 
+  public static getAllProjectsURL = '/projects'; 
   
   
 

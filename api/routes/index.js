@@ -16,6 +16,7 @@ api.delete('/product/:productId', ProductCtrl.deleteProduct)
 api.post('/signup', userCtrl.signUp)
 api.post('/login', userCtrl.signIn)
 api.post('/confirmation', userCtrl.confirmation)
+api.post('/user/setAdmin', auth, userCtrl.convertToAdmin)
 api.post('/valdiate_again', userCtrl.valdiate_again)
 api.post('/generate_password', userCtrl.generate_password)
 api.put('/modify_password', auth, userCtrl.modify_password)
@@ -29,6 +30,8 @@ api.get('/project/:projectId/notification', auth, NotificationCtrl.getNotificati
 api.get('/project/allNotifications', NotificationCtrl.getAllNotifications)
 api.get('/project/userNotifications', auth, NotificationCtrl.getUserNotifications)
 api.put('/project/answerProposal', auth, ProjectCtrl.answerProposal)
+api.get('/users', auth, userCtrl.getAllUsers)
+api.get('/projects', auth, ProjectCtrl.getAllProjects)
 
 
 

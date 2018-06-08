@@ -1,0 +1,82 @@
+<app-navbar-logged-in></app-navbar-logged-in>
+<div class="container padding">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">  
+                <div class="spacing">
+                        <ul class="sidebar-nav">
+                            <li>
+                                <a [routerLink]="['/profile']">See users registered</a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/profile/otherAccounts']"><b>Others</b></a>
+                            </li>
+                        </ul>
+                </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div id="page-content-wrapper">
+                            <div class="container-fluid">
+                                    <h1>Administration</h1>
+                                    <div class="container animated fadein">
+                                        <div class="col-xs-12 col-sm-12 col-lg-6  col-md-9">
+                                            <img *ngIf="loading" src="assets/loading.gif" />
+                                            <div class="panel-body ">
+                                                <div class="table-container">
+                                                  <table class="table table-filter">
+                                                      <tr>
+                                                          <th class="center_text" style="width: 10%">_id</th>
+                                                          <th class="center_text" style="width: 10%">Email</th>
+                                                          <th class="center_text" style="width: 10%">Display name</th>
+                                                          <th class="center_text"style="width: 10%">Display surname</th>
+                                                          <th class="center_text" style="width: 10%">Sign up date</th>
+                                                          <th class="center_text"style="width: 10%">Is confirmed</th>
+                                                          <th class="center_text"style="width: 10%">Is admin</th>
+                                                          <th class="center_text" style="width: 10%">Trello account</th>
+                                                          <th class="center_text"style="width: 10%">Github account</th>
+                                                        </tr>
+                                                        <tbody>
+                                                            <tr *ngFor="let user of infoReceived; let i = index;" >
+                                                              <td>
+                                                                <div> {{user._id}} </div>
+                                                              </td>
+                                                              <td>
+                                                                  <div> {{user.email}} </div>
+                                                              </td>
+                                                              <td>
+                                                                  <div> {{user.displayName}} </div>
+                                                              </td>
+                                                              <td>
+                                                                 <div> {{user.displaySurname}} </div>
+                                                              </td>
+                                                              <td>
+                                                                  <div> {{user.signupDate}} </div>
+                                                               </td>
+                                                               <td>
+                                                                  <div> {{user.confirmed}} </div>
+                                                               </td>
+                                                               <td>
+                                                                  <div> {{user.isAdmin}} </div>
+                                                               </td>
+                                                               <td>
+                                                                  <div> {{user.trelloAccount}} </div>
+                                                               </td>
+                                                               <td>
+                                                                  <div> {{user.githubAccount}} </div>
+                                                               </td>
+                                                            </tr>
+                                                       </tbody>
+
+                                                  </table>
+
+                                                </div>
+                                              </div>
+                                            <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+                                            <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
+                                        </div>    
+                                        </div>
+                                </div>
+                    </div>
+        </div>
+    </div>
+</div>
+    

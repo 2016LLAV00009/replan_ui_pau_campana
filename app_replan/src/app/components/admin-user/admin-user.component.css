@@ -1,0 +1,243 @@
+.padding {
+  margin-left: 5px;
+  margin-top: 10px;
+}
+
+a {
+  color: rgb(0, 0, 0);
+}
+a:hover {
+   color: rgb(54, 54, 54)
+}
+
+div.spacing {
+  line-height: 1.8;
+  font-size: 19px;
+}
+
+/*    --------------------------------------------------
+:: General
+-------------------------------------------------- */
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: #353535;
+  
+}
+.content h1 {
+  text-align: center;
+}
+.content .content-footer p {
+  color: #6d6d6d;
+  font-size: 12px;
+  text-align: center;
+}
+.content .content-footer p a {
+  color: inherit;
+  font-weight: bold;
+}
+
+/*	--------------------------------------------------
+  :: Table Filter
+  -------------------------------------------------- */
+.panel {
+  border: 1px solid #ddd;
+  background-color: #fcfcfc;
+}
+.panel .btn-group {
+  margin: 15px 0 30px;
+}
+.panel .btn-group .btn {
+  transition: background-color .3s ease;
+}
+.table-filter {
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+.table-filter tbody tr:hover {
+  background-color: #eee;
+}
+
+.pointer_ma {
+  cursor: pointer;
+}
+.table-filter tbody tr td {
+  padding: 10px;
+  vertical-align: middle;
+  border-top-color: #eee;
+}
+.table-filter tbody tr.selected td {
+  background-color: #eee;
+}
+.table-filter tr td:first-child {
+  width: 38px;
+}
+.table-filter tr td:nth-child(2) {
+  width: 35px;
+}
+.table-filter .star {
+  color: rgb(53, 53, 53);
+  text-align: center;
+  display: block;
+}
+
+.table-filter .star:hover {
+  color: rgb(0, 0, 0);
+}
+.table-filter .media-photo {
+  width: 35px;
+}
+.table-filter .media-body {
+  display: block;
+  /* Had to use this style to force the div to expand (wasn't necessary with my bootstrap version 3.3.6) */
+}
+.table-filter .media-meta {
+  font-size: 11px;
+  color: #999;
+}
+.table-filter .media .title {
+  color: #2BBCDE;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: normal;
+  margin: 0;
+}
+.table-filter .media .textNotification {
+  color: rgb(107, 107, 107);
+  font-size: 14px;
+  line-height: normal;
+  margin: 0;
+}
+
+.table-filter .media .EmailNotification {
+  color: rgb(158, 158, 158);
+  font-size: 12px;
+  font-style: italic;
+  line-height: normal;
+  margin: 0;
+}
+
+.table-filter .media .TimeNotification {
+  color: rgb(77, 77, 77);
+  font-size: 12px;
+  line-height: normal;
+  margin: 0;
+}
+
+.marginbuttons {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.table-filter .media .title span {
+  font-size: .8em;
+  margin-right: 20px;
+}
+.table-filter .media .title span.owner {
+  color: #005050;
+}
+.table-filter .media .title span.pendiente {
+  color: #f0ad4e;
+}
+.table-filter .media .summary {
+  font-size: 14px;
+}
+
+.icon {
+  font-size:25px;
+  display: inline-block;
+  width: 100%;
+  text-align:center;
+  color: rgb(67, 117, 255);
+}
+.center_text {
+  text-align:center;
+}
+.right_aligment {
+  text-align:right;
+}
+
+
+
+.button_border {
+  border: 2px solid rgb(131, 191, 247);
+  background-color: rgb(207, 218, 250);
+  color: black; 
+
+
+}
+
+.button_border_pressed {
+  border: 2px solid rgb(131, 191, 247);
+  background-color: rgb(67, 117, 255);
+  color: white; 
+
+}
+
+
+.button_border_danger {
+  border: 2px solid rgb(247, 131, 131);
+  background-color: rgb(250, 207, 207);
+  color: black; 
+}
+
+.button_border_accept {
+  border: 2px solid rgb(168, 247, 131);
+  background-color: rgb(231, 250, 207);
+  color: black; 
+}
+
+
+
+.margin_left {
+  margin: 25px 0 20px 15px;
+}
+
+.padding {
+  padding: 30px 20px 20px 35px;
+}
+
+
+.padding_top_row {
+  padding-bottom: 20px;
+  padding-left: 10px;
+}
+
+.padding_top_text {
+  padding: 5px 0 0 0;
+  margin-bottom: 10px;
+}
+
+.margin_top {
+  margin-top: 10px;
+}
+
+.stylish-input-group .input-group-addon{
+  background: white !important; 
+}
+.stylish-input-group .form-control{
+  border-right:0; 
+  box-shadow:0 0 0; 
+  border-color:#ccc;
+}
+.stylish-input-group button{
+  border:0;
+  background:transparent;
+}
+
+.margin_butom {
+  margin-bottom: 8px;
+}
+
+.margin_down {
+  margin-bottom: 20px;
+}
+
+
+.marginFound {
+  margin: 0 0 40px 0;
+}
+
+.nothing {
+  color: #999
+}
+

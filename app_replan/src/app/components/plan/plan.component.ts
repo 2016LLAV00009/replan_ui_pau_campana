@@ -3,6 +3,7 @@ import { replanAPIService } from '../../services/replanAPI.service';
 import { GlobalDataService } from '../../services/globaldata.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { User } from '../../models/user';
 
 declare var $: any;
 declare const google: any;
@@ -12,7 +13,7 @@ declare const google: any;
   templateUrl: './plan.component.html'
 })
 export class PlanComponent implements OnInit {
-
+  currentUser: User;
   idProject: number;
   idRelease: number;
   release: any;
@@ -23,13 +24,16 @@ export class PlanComponent implements OnInit {
   feature: any;
   formEditFeature: FormGroup;
   dependeciesFound: Boolean = false;
+  myPlanFound: Boolean = false;
   chartRows: any[];
+  myRows: any[];
   resourceChartRows: any[];
   dependeciesChartRows: any[];
 
   constructor(private _replanAPIService: replanAPIService,
               private globaldata: GlobalDataService,
               private activatedRoute: ActivatedRoute) {
+                this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
               this.formEditFeature = new FormGroup({
                 'name': new FormControl(''),
@@ -57,6 +61,7 @@ export class PlanComponent implements OnInit {
                     $('.title-project').text(data.name);
                   });
                   $('#loading_for_plan').show();
+                  $('#loading_for_my_plan').show();
                   $('#loading_for_features_not_assigned').show();
                   $('#loading_for_resources_chart').show();
                   $('#loading_for_dependecies_chart').show();
@@ -73,6 +78,7 @@ export class PlanComponent implements OnInit {
   chartLogic(data) {
     if (data.jobs.length > 0) {
       this.chartRows = [];
+      this.myRows = [];
       data.jobs.forEach(job => {
         const row = [
           job.resource.name,
@@ -81,12 +87,55 @@ export class PlanComponent implements OnInit {
           new Date(job.ends)
         ];
         this.chartRows.push(row);
+        if (job.resource.id == this.currentUser.resource) {
+          this.myRows.push(row); 
+        }
       });
-      this.drawChart(this.chartRows);
+      this.drawChart(this.chartRows, this.myRows);
     }
   }
 
-  drawChart(rows) {
+
+  
+
+  drawChart(rows, myRows) {
+    if (myRows.length > 0) {
+      $('.my-plan-chart-span').text('');
+      this.myPlanFound = false;
+      const my_container = document.getElementById('my_timeline');
+      const my_chart = new google.visualization.Timeline(my_container);
+      const my_dataTable = new google.visualization.DataTable();
+      my_dataTable.addColumn({ type: 'string', id: 'Resource' });
+      my_dataTable.addColumn({ type: 'string', id: 'Feature' });
+      my_dataTable.addColumn({ type: 'date', id: 'Start' });
+      my_dataTable.addColumn({ type: 'date', id: 'End' });
+      my_dataTable.addRows(myRows);
+      
+      const options = {
+        hAxis: { format: 'dd/MM' },
+      };
+
+      const my_height = my_dataTable.getDistinctValues(0).length * 51 + 60;
+      $('#my_timeline').css('height', my_height + 'px');
+      $('#my_timeline div div').first().css('height', my_height + 'px');
+      $('#my_timeline svg').css('height', my_height + 'px');
+
+      my_chart.draw(my_dataTable, options);
+    }
+    else {
+      this.myPlanFound = true;
+      $('.my-plan-chart-span').text('No tasks assigned');
+    }
+   
+
+
+
+
+
+  
+
+
+
     if (rows.length > 0) {
       const container = document.getElementById('timeline');
       const chart = new google.visualization.Timeline(container);
@@ -96,9 +145,9 @@ export class PlanComponent implements OnInit {
       dataTable.addColumn({ type: 'date', id: 'Start' });
       dataTable.addColumn({ type: 'date', id: 'End' });
       dataTable.addRows(rows);
-
+      
       const options = {
-        hAxis: { format: 'dd/MM' }
+        hAxis: { format: 'dd/MM' },
       };
 
       const height = dataTable.getDistinctValues(0).length * 51 + 30;
@@ -320,6 +369,9 @@ export class PlanComponent implements OnInit {
     $('#timeline').css('height', '0px');
     $('#timeline div div').first().css('height', '0px');
     $('#timeline svg').css('height', '0px');
+    $('#my_timeline').css('height', '0px');
+    $('#my_timeline div div').first().css('height', '0px');
+    $('#my_timeline svg').css('height', '0px');
     $('#dependecies_chart').css('height', '0px');
     $('#dependecies_chart div div').first().css('height', '0px');
     $('#dependecies_chart svg').css('height', '0px');
@@ -329,10 +381,12 @@ export class PlanComponent implements OnInit {
     $('.trash-container').hide();
 
     $('#timeline').empty();
+    $('#my_timeline').empty();
     $('#resources_chart').empty();
     $('#dependecies_chart').empty();
 
     $('#loading_for_plan').show();
+    $('#loading_for_my_plan').show();
     $('#loading_for_resources_chart').show();
     $('#loading_for_features_not_assigned').show();
     $('#loading_for_dependecies_chart').show();
@@ -341,6 +395,7 @@ export class PlanComponent implements OnInit {
     $('.resources-chart-span').text('');
     $('.not-assigned-span').text('');
     $('.plan-span').text('');
+    $('.my_plan-span').text('');
   }
 
   getReleasePlan() {
@@ -349,17 +404,20 @@ export class PlanComponent implements OnInit {
       if (data.toString() === 'e') {
         $('#error-modal').modal();
         $('#loading_for_plan').hide();
+        $('#loading_for_my_plan').hide();
         $('#loading_for_resources_chart').hide();
         $('#loading_for_dependecies_chart').hide();
         $('#error-text').text('Error loading release plan data. Try it again later.');
         this.plan = null;
         $('.plan-span').text('No planification found');
+        $('.my_plan-span').text('No tasks found');
         $('.resources-chart-span').text('No resources found');
         $('.not-assigned-span').text('No features not assigned found');
       } else {
         this.plan = data;
         if (this.plan.jobs.length === 0) {
           $('.plan-span').text('No planification found');
+          $('.my_plan-span').text('No tasks found');
         } else {
           this.chartLogic(this.plan);
         }
@@ -397,6 +455,7 @@ export class PlanComponent implements OnInit {
         $('#loading_for_features_not_assigned').hide();
       });
       $('#loading_for_plan').hide();
+      $('#loading_for_my_plan').hide();
       $('#loading_for_resources_chart').hide();
       $('#loading_for_dependecies_chart').hide();
     });
@@ -409,9 +468,11 @@ export class PlanComponent implements OnInit {
         $('.btn-previous').prop('disabled' , false);
         $('#error-modal').modal();
         $('#loading_for_plan').hide();
+        $('#loading_for_my_plan').hide();
         $('#loading_for_resources_chart').hide();
         $('#error-text').text('Error loading release plan data. Try it again later.');
         $('.plan-span').text('No planification found');
+        $('.my_plan-span').text('No tasks found');
         $('.resources-chart-span').text('No resources found');
         $('.not-assigned-span').text('No features not assigned found');
         this.plan = null;
@@ -419,6 +480,7 @@ export class PlanComponent implements OnInit {
         this.plan = data;
         if (this.plan.jobs.length === 0) {
           $('.plan-span').text('No planification found');
+          $('.my_plan-span').text('No tasks found');
         } else {
           this.chartLogic(this.plan);
         }
@@ -456,6 +518,7 @@ export class PlanComponent implements OnInit {
         $('#loading_for_features_not_assigned').hide();
       });
       $('#loading_for_plan').hide();
+      $('#loading_for_my_plan').hide();
       $('#loading_for_resources_chart').hide();
       $('#loading_for_dependecies_chart').hide();
     });

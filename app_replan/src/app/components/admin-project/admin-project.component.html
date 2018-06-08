@@ -1,0 +1,93 @@
+<app-navbar-logged-in></app-navbar-logged-in>
+<div class="container padding">
+    <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3">  
+                <div class="spacing">
+                        <ul class="sidebar-nav">
+                            <li>
+                                <a [routerLink]="['/admin/user']">See users</a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/admin/project']"><b>See Projects</b></a>
+                            </li>
+                        </ul>
+                </div>
+        </div>
+        <div class="col-sm-12 col-md-9 col-lg-9">
+                    <div id="page-content-wrapper">
+                            <div class="container-fluid">
+                                    <div class="row">
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                              <h2 class= "margin_down">Total projects: {{total}}</h2>
+                                            </div>
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div>
+                                                    <div class="btn-group">
+                                                      <button  id="button_name" type="button" class="btn btn-filter button_border_pressed" (click)="updateList('name')">Name</button>
+                                                      <button id="button_email"type="button" class="btn btn-default btn-filter button_border" (click)="updateList('email')" >Email</button>
+                                                    </div>
+                                                  </div>
+                                            </div>
+                                          </div>
+                                
+                                    <div class="container animated fadein">
+                                        <div class="col-xs-12 col-sm-12 col-lg-6  col-md-9">
+                                            <img *ngIf="loading" src="assets/loading.gif" />
+                                            <div class="panel-body ">
+                                                <div class="table-container">
+                                                  <table class="table table-filter">
+                                                      <tr>
+                                                          <th class="center_text" style="width: 20%">Name</th>
+                                                          <th class="center_text"style="width: 20%">Owner</th>
+                                                          <th class="center_text" style="width: 20%">Members</th>
+                                                          <th class="center_text"style="width: 2000px">Unconfirmed members</th>
+                                                          <th class="center_text" style="width: 20%">Private</th>
+                                                        </tr>
+                                                        <tbody>
+                                                            <tr *ngFor="let project of infoShowed; let i = index;" >
+                                                                                          
+                                                              <td>
+                                                                    <div class= "center_text"  style="width:150px"> {{project.name}} </div>
+                                                                 </td>
+                                                              <td>
+                                                                  <div class= "center_text"  style="width:180px"> {{project.owner}} </div>
+                                                              </td>
+                                                              <td>
+                                                                 <div class = "center_text nothing" *ngIf="project?.members.length == 0">No one</div>    
+                                                               
+                                                                  <div class= "center_text"  style="width:180px" *ngFor="let members of project.members; let y = index;">
+
+                                                                  {{members}}
+                                                                  </div>
+                                                              </td>
+                                                              
+                                                              <td >
+                                                                    <div class = "center_text nothing" *ngIf="project?.unconfirmedMembers.length == 0">No one</div>    
+                                                                <div class= "center_text"  style="width:180px" *ngFor="let umembers of project.unconfirmedMembers; let y = index;">
+
+                                                                            {{umembers}}
+                                                                            </div>
+                                                                 
+                                                              </td>
+                                                              <td>
+                                                                    <div class= "center_text">   <i *ngIf="project?.is_private == true" class="fa fa-check icon"></i>
+                                                                    <i *ngIf="project?.is_private == false" class="fa fa-times icon "></i>
+                                                                 </div>
+                                                                 </td>
+                                                            </tr>
+                                                       </tbody>
+
+                                                  </table>
+
+                                                </div>
+                                              </div>
+                                            <div *ngIf= "showError" class="alert alert-danger">{{errorMessage}}</div>
+                                            <div *ngIf= "showCorrect" class="alert alert-success">{{errorMessage}}</div>
+                                        </div>    
+                                        </div>
+                                </div>
+                    </div>
+        </div>
+    </div>
+</div>
+    

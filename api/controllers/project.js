@@ -90,6 +90,28 @@ function searchProjects(req, res) {
   })
 }
 
+function getAllProjects (req, res) {
+  console.log("getAllProjects")
+    console.log(req.user)
+    User.findById(req.user, (err, oneuser) => {
+      if (err) return res.status(500).send({message: `Error while getting all projects ${err}`})
+      if (oneuser.isAdmin) {
+        var a = 1;
+      Project.find((err,projects) => {
+          return res.status(200).send({
+            message: 'You have received correctly all the projects',
+            all_projects: projects
+          })
+
+        })
+       }
+      else return res.status(500).send({message: `Error while getting all projects (You need to be an admin)`})
+    })
+}
+
+
+
+
 
 
 function addMember(req, res) {
@@ -330,5 +352,6 @@ module.exports = {
   answerProposal,
   addMember,
   removeMember,
-  searchProjects
+  searchProjects,
+  getAllProjects
 }

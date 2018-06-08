@@ -61,6 +61,7 @@ function signUp (req, res) {
 
 function confirmation (req, res) {
   console.log("confirmation")
+
   console.log(req.body.token)
   service.decodeToken(req.body.token)
   .then(decode => {
@@ -76,6 +77,16 @@ function confirmation (req, res) {
    // handle errors
  })
 
+}
+
+function convertToAdmin (req, res) {
+  console.log("convert to Admin")
+  console.log(req.user)
+  let update = {isAdmin: true}
+  User.findByIdAndUpdate(req.user, update, (err, userUpdated) => {
+    if (err) return res.status(500).send({message: `Error while converting to admin${err}`})
+    return res.status(200).send({ message: 'Your are now an admin'})
+  })
 }
 
 function valdiate_again (req, res) {
@@ -189,7 +200,24 @@ function update_account (req, res) {
 }
 
 
+function getAllUsers (req, res) {
+  console.log("getAllUsers")
+    console.log(req.user)
+    User.findById(req.user, (err, oneuser) => {
+      if (err) return res.status(500).send({message: `Error while getting all users ${err}`})
+      if (oneuser.isAdmin) {
+        var a = 1;
+      User.find((err,users) => {
+          return res.status(200).send({
+            message: 'You have received correctly all the users',
+            all_users: users
+          })
 
+        })
+       }
+      else return res.status(500).send({message: `Error while getting all users (You need to be an admin)`})
+    })
+}
 
 
 
@@ -256,9 +284,11 @@ function sendMailPassword (password, user) {
 module.exports = {
   signUp,
   confirmation,
+  convertToAdmin,
   valdiate_again,
   generate_password,
   modify_password,
   update_account,
-  signIn
+  signIn,
+  getAllUsers
 }

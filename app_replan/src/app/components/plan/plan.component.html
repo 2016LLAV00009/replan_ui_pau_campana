@@ -1,3 +1,4 @@
+
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 <app-navbar-logged-in></app-navbar-logged-in>
 <div class="jumbotron not-margin">
@@ -8,8 +9,23 @@
 </div>
 <div class="container">
 
-    <div class="planification-title-container">
-        <span class="planification-title">Planification</span>
+
+  <div class="planification-title-container">
+    <span class="planification-title">My tasks</span>
+    <!--<i (click)="refreshPlan()" class="fa fa-refresh fa-2x" aria-hidden="true" title="Refresh Planification"></i>-->
+</div>
+<hr class="hr-planification">
+
+<div id="loading_for_my_plan" class="loading_spinner"></div>
+<div class="my_plan-span data-founded" [hidden]="plan !== null && myRows !== 0"></div>
+<div class="my-plan-chart-span data-founded" ></div>
+<div id="my_timeline"></div>
+
+
+
+
+  <div class="planification-title-container">
+        <span class="planification-title">General Planification</span>
         <button (click)="refreshPlan()" type="button" class="btn btn-success btn-pln" title="Force New Plan">Force New</button>
         <button (click)="previousPlan()" type="button" class="btn btn-danger btn-pln btn-previous" title="Previous Plan">Previous Plan</button>
         <!--<i (click)="refreshPlan()" class="fa fa-refresh fa-2x" aria-hidden="true" title="Refresh Planification"></i>-->

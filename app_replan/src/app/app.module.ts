@@ -16,7 +16,6 @@ import { AuthenticationService} from './services/AuthenticationService';
 // Components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
-import { HomeComponent } from './components/home/home.component';
 import { ProjectComponent } from './components/project/project.component';
 import { PlanComponent } from './components/plan/plan.component';
 import { ProjectSettingsComponent } from './components/projectSettings/projectsettings.component';
@@ -27,6 +26,7 @@ import { SendValidationAgainComponent } from './components/send-validation-again
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { AuthGuard } from './AuthGuard';
+import { AuthGuardAdmin } from './AuthGuardAdmin';
 import { NavbarLoggedInComponent } from './components/shared/navbar-logged-in/navbar-logged-in.component';
 import { SidePerfileComponent } from './components/shared/side-perfile/side-perfile.component';
 import { PerfileAtributesComponent } from './components/perfile-atributes/perfile-atributes.component';
@@ -34,13 +34,18 @@ import { PerfileModifyPasswordComponent } from './components/perfile-modify-pass
 import { PerfileOtherAccountsComponent } from './components/perfile-other-accounts/perfile-other-accounts.component';
 import { PerfileSkillsComponent } from './components/perfile-skills/perfile-skills.component';
 import { PerfileAvailabilityComponent } from './components/perfile-availability/perfile-availability.component';
+import { AdminUserComponent } from './components/admin-user/admin-user.component';
+import { AdminProjectComponent } from './components/admin-project/admin-project.component';
+
+import { AdminComponent } from './components/admin/admin.component';
+
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
 
   declarations: [
     AppComponent,
     NavbarComponent,
-    HomeComponent,
     ProjectComponent,
     PlanComponent,
     ProjectSettingsComponent,
@@ -56,7 +61,9 @@ import { PerfileAvailabilityComponent } from './components/perfile-availability/
     PerfileModifyPasswordComponent,
     PerfileOtherAccountsComponent,
     PerfileSkillsComponent,
-    PerfileAvailabilityComponent
+    PerfileAvailabilityComponent,
+    AdminUserComponent,
+    AdminProjectComponent
   ],
   entryComponents: [],
   imports: [
@@ -73,7 +80,8 @@ import { PerfileAvailabilityComponent } from './components/perfile-availability/
     replanAPIUserService,
     AuthenticationService,
     GlobalDataService,
-    AuthGuard
+    AuthGuard,
+    AuthGuardAdmin
   ],
   bootstrap: [AppComponent]
 })

@@ -3,7 +3,7 @@
 <div id="loading_for_projects" class="loading_spinner"></div>
 <div class="projects-span data-founded" [hidden]="projects?.length !== 0"></div>
 
-<div class="row">
+<div style="width:100%" class="row">
     <div class="col-sm-12 col-md-9 col-lg-9 padding">
         <div class="row padding_top_row">
             <div class="col-sm-12 col-md-7 col-lg-5 offset-sm-0 offset-md-2 offset-lg-0">
@@ -83,10 +83,10 @@
           </tbody>
         </table>
         <div class="margin_top" align="right">
-            <button class="btn btn-default button_border" (click)="changePageFound(pageFound-1)">
+            <button class="btn-sm btn-default button_border_soft" (click)="changePageFound(pageFound-1)">
                 <i class="fa fa-step-backward fa-lg"></i> Previous
             </button>
-            <button class="btn btn-default button_border" (click)="changePageFound(pageFound+1)">
+            <button class="btn-sm btn-default button_border_soft" (click)="changePageFound(pageFound+1)">
                 <i class="fa fa-step-forward fa-lg"></i> Next
             </button>
           </div>
@@ -173,10 +173,10 @@
           </tbody>
         </table>
         <div class="margin_top" align="right">
-            <button class="btn btn-default button_border" (click)="changePage(page-1)">
+            <button class="btn-sm btn-default button_border_soft" (click)="changePage(page-1)">
                 <i class="fa fa-step-backward fa-lg"></i> Previous
             </button>
-            <button class="btn btn-default button_border" (click)="changePage(page+1)">
+            <button class="btn-sm btn-default button_border_soft" (click)="changePage(page+1)">
                 <i class="fa fa-step-forward fa-lg"></i> Next
             </button>
           </div>
@@ -228,10 +228,10 @@
                 </tbody>
               </table>
               <div class="margin_top" align="center">
-                  <button class="btn btn-default button_border" (click)="changePageNotifications(pageNotification-1)">
+                  <button class="btn-sm btn-default button_border_soft" (click)="changePageNotifications(pageNotification-1)">
                       <i class="fa fa-step-backward fa-lg"></i> Previous
                   </button>
-                  <button class="btn btn-default button_border" (click)="changePageNotifications(pageNotification+1)">
+                  <button class="btn-sm btn-default button_border_soft" (click)="changePageNotifications(pageNotification+1)">
                       <i class="fa fa-step-forward fa-lg"></i> Next
                   </button>
                 </div>

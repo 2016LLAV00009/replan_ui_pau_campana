@@ -81,7 +81,7 @@
                                                 <p class="card-text" *ngIf="skill.description.length === 0">No Description</p>
                                                 <p [hidden]="skill?.description.length > 28" class="card-text">{{skill.description}}</p>
                                                 <p [hidden]="skill?.description.length <= 28" class="card-text" title="{{skill.description}}">{{skill.description.substring(0, 26) + '...'}}</p>
-                                                <div [hidden]=true class="icons-resources-content">
+                                                <div [hidden]=!currentUser.isAdmin class="icons-resources-content">
                                                         <a class="padding-icon" (click)="deleteSkill(skill.id)">
                                                             <i class="fa fa-trash-o fa-2x" aria-hidden="true" title="Delete Skill"></i>
                                                         </a>

@@ -244,6 +244,43 @@ export class replanAPIUserService {
         })
     }
   }
+  
+
+  getAllUsers() {
+    const url = this.projectsURL + AppConstants.getAllUsersURL;
+    let token = this.getToken();
+    if (token) {
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.get(url, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
+
+  getAllProjects() {
+    const url = this.projectsURL + AppConstants.getAllProjectsURL;
+    let token = this.getToken();
+    if (token) {
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      });
+      return this.http.get(url, { headers })
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: Response) => {
+          return Observable.throw(error.json());
+        })
+    }
+  }
 
 
   getUserNotifications() {
