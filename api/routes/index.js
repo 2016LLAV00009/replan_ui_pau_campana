@@ -2,36 +2,35 @@
 
 const express = require('express')
 const userCtrl = require('../controllers/user')
-const ProductCtrl = require('../controllers/product')
 const ProjectCtrl = require('../controllers/project')
 const NotificationCtrl = require('../controllers/notification')
 const auth = require('../middlewares/auth')
 const api = express.Router()
 
-api.get('/product', ProductCtrl.getProducts)
-api.get('/product/:productId', ProductCtrl.getProduct)
-api.post('/product', ProductCtrl.saveProduct)
-api.put('/product/:productId', ProductCtrl.updateProduct)
-api.delete('/product/:productId', ProductCtrl.deleteProduct)
-api.post('/signup', userCtrl.signUp)
-api.post('/login', userCtrl.signIn)
-api.post('/confirmation', userCtrl.confirmation)
-api.post('/user/setAdmin', auth, userCtrl.convertToAdmin)
-api.post('/valdiate_again', userCtrl.valdiate_again)
-api.post('/generate_password', userCtrl.generate_password)
-api.put('/modify_password', auth, userCtrl.modify_password)
-api.put('/update_account', auth, userCtrl.update_account)
-api.put('/project', auth, ProjectCtrl.createProject)
-api.get('/project', auth, ProjectCtrl.getProjectsByUser)
-api.put('/project/addMember', auth, ProjectCtrl.addMember)
-api.put('/project/removeMember', auth, ProjectCtrl.removeMember)
-api.get('/project/search', auth, ProjectCtrl.searchProjects)
-api.get('/project/:projectId/notification', auth, NotificationCtrl.getNotificationsByProject)
-api.get('/project/allNotifications', NotificationCtrl.getAllNotifications)
-api.get('/project/userNotifications', auth, NotificationCtrl.getUserNotifications)
-api.put('/project/answerProposal', auth, ProjectCtrl.answerProposal)
+api.post('/auth/signup', userCtrl.signUp)
+api.post('/auth/login', userCtrl.signIn)
+api.post('/auth/confirmation', userCtrl.confirmation)
+api.post('/auth/confirmation_again', userCtrl.valdiate_again)
+
+//Descomentar si vols fer administrador des d'una crida.
+//api.post('/user/setAdmin', auth, userCtrl.convertToAdmin)
+api.post('/user/generate_password', userCtrl.generate_password)
+api.put('/user/modify_password', auth, userCtrl.modify_password)
+api.put('/user/update_account', auth, userCtrl.update_account)
 api.get('/users', auth, userCtrl.getAllUsers)
+
+api.put('/project/create', auth, ProjectCtrl.createProject)
+api.get('/project/by_user', auth, ProjectCtrl.getProjectsByUser)
+api.get('/project/search', auth, ProjectCtrl.searchProjects)
+api.put('/project/member/add', auth, ProjectCtrl.addMember)
+api.put('/project/member/remove', auth, ProjectCtrl.removeMember)
+api.put('/project/answer_proposal', auth, ProjectCtrl.answerProposal)
 api.get('/projects', auth, ProjectCtrl.getAllProjects)
+
+api.get('/notification/project/:projectId/', auth, NotificationCtrl.getNotificationsByProject)
+api.get('/notification/project/', NotificationCtrl.getAllNotifications)
+api.get('/notification/user', auth, NotificationCtrl.getUserNotifications)
+
 
 
 

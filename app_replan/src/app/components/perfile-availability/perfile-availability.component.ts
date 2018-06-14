@@ -27,7 +27,7 @@ export class PerfileAvailabilityComponent implements OnInit {
     
   ) { 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.idProject = 127;
+    this.idProject = 129;
     this.carregant = true;
   }
 

@@ -207,7 +207,7 @@ export class replanAPIUserService {
   }
 
   addProject(project: string) {
-    const url = this.projectsURL + AppConstants.getProjectURL;
+    const url = this.projectsURL + AppConstants.createProjectURL;
     let token = this.getToken();
     let body = project;
     if (token) {
@@ -228,7 +228,7 @@ export class replanAPIUserService {
   }
 
   getUserProjects() {
-    const url = this.projectsURL + AppConstants.getProjectURL;
+    const url = this.projectsURL + AppConstants.getProjectByUserURL;
     let token = this.getToken();
     if (token) {
       const headers = new Headers({

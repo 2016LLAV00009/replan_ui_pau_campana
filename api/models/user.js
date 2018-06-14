@@ -10,7 +10,7 @@ const UserSchema = new Schema({
   displayName: String,
   displaySurname: String,
   resource: String,
-  avatar: String,
+  avatar: String, //finalment no s'utilitza. Es faria servir perque l'usuari tingues imatge
   password: String,
   signupDate: {type: Date, default: Date.now()},
   lastLogin: Date,

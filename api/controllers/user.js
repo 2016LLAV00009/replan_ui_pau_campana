@@ -258,7 +258,7 @@ function sendMailConfirmation (token, user) {
   console.log(user)
   console.log(user.displayName)
   let from = 'replan.system@gmail.com'
-  let to = 'pau.campanya.soler@gmail.com'
+  let to = user.email
   let subject = 'Replan validating account'
   let html = `<h1>Welcome to Replan ${user.displayName} </h1>
   <p>Please, confirm your account by clicking the following link: </p>
@@ -271,7 +271,7 @@ function sendMailPassword (password, user) {
   console.log(user)
   console.log(user.displayName)
   let from = 'replan.system@gmail.com'
-  let to = 'pau.campanya.soler@gmail.com'
+  let to = user.email
   let subject = 'Replan validating account'
   let html = `<h1>New password (Replan) </h1>
   <p>Hello ${user.displayName} , we have generated for you a new password: </p>

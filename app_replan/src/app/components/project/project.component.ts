@@ -46,7 +46,7 @@ export class ProjectComponent implements OnInit {
   resourcesModified: any;
   formEditProject: any;
   project: any;
-  idProject_127: any;
+  idProject_129: any;
   currentUser: User;
   innerHeight: any;
   innerWidth: any;
@@ -56,7 +56,7 @@ export class ProjectComponent implements OnInit {
               private router: Router,
               private globaldata: GlobalDataService) {
                 this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                this.idProject_127 = 127;
+                this.idProject_129 = 129;
                 this.activatedRoute.params.subscribe( params => {
                   this.idProject = params['id'];
                   this.globaldata.setCurrentProjectId(this.idProject);
@@ -69,7 +69,7 @@ export class ProjectComponent implements OnInit {
                     this.project = data;
                     $('.title-project').text(data.name);
                   });
-                  this._replanAPIService.getSkillsProject(this.idProject_127)
+                  this._replanAPIService.getSkillsProject(this.idProject_129)
                   .subscribe( data => {
                     if (data.toString() === 'e') {
                       $('#error-modal').modal();
@@ -77,7 +77,7 @@ export class ProjectComponent implements OnInit {
                     }
                     this.skills = data;
                   });
-                  this._replanAPIService.getResourcesProject(this.idProject_127)
+                  this._replanAPIService.getResourcesProject(this.idProject_129)
                   .subscribe( data => {
                     if (data.toString() === 'e') {
                       $('#error-modal').modal();
